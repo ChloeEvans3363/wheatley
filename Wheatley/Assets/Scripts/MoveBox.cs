@@ -52,8 +52,11 @@ public class MoveBox : MonoBehaviour
         var ray = Camera.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out var hitInfo, _raycastDistance, _dropTargetLayerMask))
             return false;
-        newPosition = hitInfo.collider.gameObject.transform.position;
         newMapPosition = hitInfo.collider.gameObject.GetComponent<MapObject>().location;
+        if(MapManager.Instance.objectsOnMap.ContainsKey(newMapPosition))
+            return false;
+
+        newPosition = hitInfo.collider.gameObject.transform.position;
         return true;
     }
 }
