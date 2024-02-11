@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class MoveBox : MonoBehaviour
 {
     Vector3 newPosition;
+    private Tuple<int, int> newMapPosition;
+
     protected Camera Camera { get; private set; }
     bool placed;
 
@@ -37,7 +40,11 @@ public class MoveBox : MonoBehaviour
     private void OnMouseDown()
     {
         if (DetectDropTarget())
+        {
+            MapManager.Instance.objectsOnMap.Add(newMapPosition, this.gameObject);
+            MapManager.Instance.SetControlledObject(newMapPosition);
             placed = true;
+        }
     }
 
     bool DetectDropTarget()
@@ -46,6 +53,7 @@ public class MoveBox : MonoBehaviour
         if (!Physics.Raycast(ray, out var hitInfo, _raycastDistance, _dropTargetLayerMask))
             return false;
         newPosition = hitInfo.collider.gameObject.transform.position;
+        newMapPosition = hitInfo.collider.gameObject.GetComponent<MapObject>().location;
         return true;
     }
 }
