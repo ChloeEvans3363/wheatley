@@ -21,5 +21,14 @@ public class GameManager : MonoBehaviour
         {
             GameObject block = Instantiate(moveableBlock, blockSpawnPos, Quaternion.identity, this.transform);
         }
+
+        if (Input.GetKeyDown(KeyCode.W))
+            MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Up);
+        else if (Input.GetKeyDown(KeyCode.S))
+            MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Down);
+        else if (Input.GetKeyDown(KeyCode.D))
+            MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Right);
+        else if (Input.GetKeyDown(KeyCode.A))
+            MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Left);
     }
 }

@@ -57,7 +57,7 @@ public class MapManager : MonoBehaviour
             for (int j = 0; j < map.GetLength(1); j++)
             {
                 GameObject floorElement = Instantiate(floor, new Vector3(i, map[i,j],j), Quaternion.identity, this.transform);
-                floorElement.GetComponent<MapObject>().location = new Tuple<int, int>(i, j);
+                floorElement.GetComponent<GroundObject>().SetupData(new Tuple<int, int>(i, j), map[i,j]);
 
                 if (i == playerLocation.Item1 && j == playerLocation.Item2)
                 {
@@ -68,18 +68,6 @@ public class MapManager : MonoBehaviour
         }
 
         Camera.main.transform.position = new Vector3(map.GetUpperBound(0)/2, 10, map.GetLowerBound(1)-3);
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.W))
-            MovePlayer(MapManager.DirectionEnum.Up, playerLocation);
-        else if (Input.GetKeyDown(KeyCode.S))
-            MovePlayer(MapManager.DirectionEnum.Down, playerLocation);
-        else if (Input.GetKeyDown(KeyCode.D))
-            MovePlayer(MapManager.DirectionEnum.Right, playerLocation);
-        else if (Input.GetKeyDown(KeyCode.A))
-            MovePlayer(MapManager.DirectionEnum.Left, playerLocation);
     }
 
     //Check tile for object, let object recursively call check tile 
@@ -139,29 +127,29 @@ public class MapManager : MonoBehaviour
     }
     
     //If movement checks succeeded, recursively move all objects that would be pushed by the player
-    public void MovePlayer(DirectionEnum direction, Tuple<int,int> pos)
+    public void MovePlayer(DirectionEnum direction)
     {
-        Tuple<int, int> newPos = pos;
+        Tuple<int, int> newPos = playerLocation;
 
         switch (direction)
         {
             case DirectionEnum.Left:
-                newPos = new Tuple<int, int>(pos.Item1 - 1, pos.Item2);
+                newPos = new Tuple<int, int>(playerLocation.Item1 - 1, playerLocation.Item2);
                 if (CheckTile(direction, newPos))
                     UpdatePlayerLocation(new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2), newPos);
                 break;
             case DirectionEnum.Right:
-                newPos = new Tuple<int, int>(pos.Item1 + 1, pos.Item2);
+                newPos = new Tuple<int, int>(playerLocation.Item1 + 1, playerLocation.Item2);
                 if (CheckTile(direction, newPos))
                     UpdatePlayerLocation(new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2), newPos); 
                     break;
             case DirectionEnum.Up:
-                newPos = new Tuple<int, int>(pos.Item1, pos.Item2 + 1);
+                newPos = new Tuple<int, int>(playerLocation.Item1, playerLocation.Item2 + 1);
                 if (CheckTile(direction, newPos))
                     UpdatePlayerLocation(new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2), newPos); 
                 break;
             case DirectionEnum.Down:
-                newPos = new Tuple<int, int>(pos.Item1, pos.Item2 - 1);
+                newPos = new Tuple<int, int>(playerLocation.Item1, playerLocation.Item2 - 1);
                 if (CheckTile(direction, newPos))
                     UpdatePlayerLocation(new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2), newPos); 
                 break;
