@@ -56,8 +56,24 @@ public class MapManager : MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
+                
                 GameObject floorElement = Instantiate(floor, new Vector3(i, map[i,j],j), Quaternion.identity, this.transform);
                 floorElement.GetComponent<GroundObject>().SetupData(new Tuple<int, int>(i, j), map[i,j]);
+                /*
+                // If there is at least one row above us...
+                if (i > 0)
+                    // and the tile above us is not an empty obstacle...
+                    if (map[i - 1, j] != null)
+                        // connect the current tile to the one above.
+                        connectTiles(map[i - 1, j], DirectionEnum.Down, floorElement);
+
+                // Similarly, if there is at least one column to the left...
+                if (j > 0)
+                    // and the tile to the left is not an empty obstacle...
+                    if (map[i, j - 1] != null)
+                        // connect the current tile to the leftward one.
+                        connectTiles(map[i, j - 1], DirectionEnum.Right, floorElement);
+                */
 
                 if (i == playerLocation.Item1 && j == playerLocation.Item2)
                 {
@@ -176,6 +192,33 @@ public class MapManager : MonoBehaviour
     public void SetControlledObject(Tuple<int,int> newLoc)
     {
         playerLocation = newLoc;
+    }
+
+    private void connectTiles(GameObject from, DirectionEnum direction, GameObject to)
+    {
+        // Grab the node scripts attached to the two tile game objects.
+        Node fromNode = from.GetComponent<Node>();
+        Node toNode = to.GetComponent<Node>();
+
+        // The first direction is simple, add it to the from node.
+        fromNode.Connections.Add(direction, to);
+
+        if(direction == DirectionEnum.Up)
+        {
+            toNode.Connections.Add(DirectionEnum.Down, from);
+        }
+        else if(direction == DirectionEnum.Down)
+        {
+            toNode.Connections.Add(DirectionEnum.Up, from);
+        }
+        else if (direction == DirectionEnum.Left)
+        {
+            toNode.Connections.Add(DirectionEnum.Right, from);
+        }
+        else if(direction == DirectionEnum.Right)
+        {
+            toNode.Connections.Add(DirectionEnum.Left, from);
+        }
     }
 
     //Trigger Baba-Is-You map reading to determine if new rules have been added
