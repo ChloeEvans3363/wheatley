@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,9 +26,13 @@ public class MapManager : MonoBehaviour
 
     [SerializeField] GameObject floor;
     [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject endPrefab;
     [SerializeField] Tuple<int, int> playerLocation = new Tuple<int, int>(1, 1);
+    [SerializeField] Tuple<int, int> endLocation = new Tuple<int, int>(7, 4);
     public Dictionary<Tuple<int, int>, GameObject> objectsOnMap;
     public Dictionary<Tuple<int, int>, GameObject> floorElements;
+    public GameObject player;
+    public GameObject end;
 
     public enum DirectionEnum
     {
@@ -78,8 +83,14 @@ public class MapManager : MonoBehaviour
 
                 if (i == playerLocation.Item1 && j == playerLocation.Item2)
                 {
-                    GameObject player = Instantiate(playerPrefab, new Vector3(i, map[i, j] + 1, j), Quaternion.identity, this.transform);
+                    player = Instantiate(playerPrefab, new Vector3(i, map[i, j] + 1, j), Quaternion.identity, this.transform);
                     objectsOnMap.Add(new Tuple<int, int>(i, j), player);
+                }
+
+                if(i == endLocation.Item1 && j ==  endLocation.Item2)
+                {
+                    end = Instantiate(endPrefab, new Vector3(i, map[i, j] + 1, j), Quaternion.identity, this.transform);
+                    objectsOnMap.Add(new Tuple<int, int>(i, j), end);
                 }
             }
         }
@@ -235,6 +246,11 @@ public class MapManager : MonoBehaviour
         {
             toNode.Connections.Add(DirectionEnum.Left, from);
         }
+    }
+
+    public GameObject currentTile(int x, int z)
+    {
+        return floorElements[new Tuple<int, int>(x, z)];
     }
 
     //Trigger Baba-Is-You map reading to determine if new rules have been added

@@ -249,6 +249,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 1313186528508554042, guid: 79d9c40f90f4f484fb1a4e3bbc86f323, type: 3}
   playerPrefab: {fileID: 2238107481006007574, guid: 5b280842ce4d4bc439ae2d1bcdeb5b58, type: 3}
+  endPrefab: {fileID: 1984702990544173879, guid: 02229f3a3b6448a48abc583b501b1043, type: 3}
+  player: {fileID: 0}
+  end: {fileID: 0}
 --- !u!4 &934417699
 Transform:
   m_ObjectHideFlags: 0
@@ -277,6 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveableBlock: {fileID: 5895787365095305930, guid: e76adeb91221d814bb0e51537e9e72f3, type: 3}
+  playerControl: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
