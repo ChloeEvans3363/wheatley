@@ -27,6 +27,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] GameObject playerPrefab;
     [SerializeField] Tuple<int, int> playerLocation = new Tuple<int, int>(1, 1);
     public Dictionary<Tuple<int, int>, GameObject> objectsOnMap;
+    public Dictionary<Tuple<int, int>, GameObject> floorElements;
 
     public enum DirectionEnum
     {
@@ -51,29 +52,29 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         objectsOnMap = new Dictionary<Tuple<int, int>, GameObject>();
+        floorElements = new Dictionary<Tuple<int, int>, GameObject>();
+
+        createTile(0, 0, new Tuple<int, int>(0, 0));
 
         for (int i = 0; i < map.GetLength(0); i++)
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
+                GameObject newTile = createTile(i, j, new Tuple<int, int>(i, j));
+
                 
-                GameObject floorElement = Instantiate(floor, new Vector3(i, map[i,j],j), Quaternion.identity, this.transform);
-                floorElement.GetComponent<GroundObject>().SetupData(new Tuple<int, int>(i, j), map[i,j]);
-                /*
-                // If there is at least one row above us...
                 if (i > 0)
                     // and the tile above us is not an empty obstacle...
-                    if (map[i - 1, j] != null)
+                    if (floorElements[new Tuple<int, int>(i - 1, j)] != null)
                         // connect the current tile to the one above.
-                        connectTiles(map[i - 1, j], DirectionEnum.Down, floorElement);
+                        connectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, newTile);
 
                 // Similarly, if there is at least one column to the left...
                 if (j > 0)
                     // and the tile to the left is not an empty obstacle...
-                    if (map[i, j - 1] != null)
+                    if (floorElements[new Tuple<int, int>(i, j - 1)] != null)
                         // connect the current tile to the leftward one.
-                        connectTiles(map[i, j - 1], DirectionEnum.Right, floorElement);
-                */
+                        connectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, newTile);
 
                 if (i == playerLocation.Item1 && j == playerLocation.Item2)
                 {
@@ -84,6 +85,21 @@ public class MapManager : MonoBehaviour
         }
 
         Camera.main.transform.position = new Vector3(map.GetUpperBound(0)/2, 10, map.GetLowerBound(1)-3);
+    }
+
+    private GameObject createTile(int x, int y, Tuple<int, int> pos)
+    {
+        if (!floorElements.ContainsKey(pos))
+        {
+            GameObject floorElement = Instantiate(floor, new Vector3(x, map[x, y], y), Quaternion.identity, this.transform);
+            floorElement.GetComponent<GroundObject>().SetupData(new Tuple<int, int>(x, y), map[x, y]);
+
+            floorElements.Add(pos, floorElement);
+
+            return floorElement;
+        }
+
+        return floorElements[pos];
     }
 
     //Check tile for object, let object recursively call check tile 
