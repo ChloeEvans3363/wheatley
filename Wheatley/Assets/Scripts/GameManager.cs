@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -12,12 +13,23 @@ public class GameManager : MonoBehaviour
 
     private GameObject player;
     private GameObject end;
+    private float radius = 0.1f;
+
+    // The current tile the character is on.
+    private GameObject CurrentTile { get; set; } = null;
+
+    // The tile the character is moving to.
+    private GameObject TargetTile { get; set; } = null;
 
     // Start is called before the first frame update
     void Start()
     {
         player = MapManager.Instance.player;
         end = MapManager.Instance.end;
+
+        Vector3 playerPositon = player.transform.position;
+        CurrentTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
+        TargetTile = CurrentTile;
     }
 
     // Update is called once per frame
@@ -30,11 +42,9 @@ public class GameManager : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Vector3 playerPositon = player.transform.position;
             Vector3 endPosition = end.transform.position;
             StartCoroutine(HandleInput
-                (MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z),
-                MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
+                (CurrentTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
         }
 
         // Move character
@@ -49,6 +59,20 @@ public class GameManager : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.A))
                 MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Left);
         }
+
+        //AStar Movement
+        if(path.Count > 0)
+        {
+            Vector3 distance = TargetTile.transform.position - transform.position;
+
+            if (distance.magnitude < radius)
+            {
+                TargetTile = path.Pop().Tile;
+            }
+
+            CurrentTile = TargetTile;
+        }
+        //MapManager.Instance.MovePlayer(TargetTile.);
     }
 
     private IEnumerator HandleInput(GameObject start, GameObject end)
