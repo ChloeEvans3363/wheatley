@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     // The tile the character is moving to.
     private GameObject TargetTile { get; set; } = null;
 
+    NodeRecord TargetNodeRecord = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
         Vector3 playerPositon = player.transform.position;
         CurrentTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
         TargetTile = CurrentTile;
+        Debug.Log(CurrentTile.transform.position);
     }
 
     // Update is called once per frame
@@ -61,18 +64,26 @@ public class GameManager : MonoBehaviour
         }
 
         //AStar Movement
+        
+        
         if(path.Count > 0)
         {
-            Vector3 distance = TargetTile.transform.position - transform.position;
+            Vector3 distance = TargetTile.transform.position - CurrentTile.transform.position;
 
             if (distance.magnitude < radius)
             {
-                TargetTile = path.Pop().Tile;
+                TargetNodeRecord = path.Pop();
+                TargetTile = TargetNodeRecord.Tile;
             }
 
             CurrentTile = TargetTile;
         }
-        //MapManager.Instance.MovePlayer(TargetTile.);
+        if(TargetNodeRecord != null)
+        {
+            //MapManager.Instance.UpdatePlayerLocation(new );
+        }
+
+        
     }
 
     private IEnumerator HandleInput(GameObject start, GameObject end)

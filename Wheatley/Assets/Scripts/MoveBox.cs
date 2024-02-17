@@ -42,7 +42,7 @@ public class MoveBox : MonoBehaviour
         if (DetectDropTarget())
         {
             MapManager.Instance.objectsOnMap.Add(newMapPosition, this.gameObject);
-            //MapManager.Instance.SetControlledObject(newMapPosition);
+            //MapManager.Instance.SetControlledObject(this.gameObject, newMapPosition);
             placed = true;
         }
     }

@@ -43,7 +43,6 @@ public class AStar : MonoBehaviour
                     newNode.node = current.node.Connections[direction].GetComponent<Node>();
                     newNode.costSoFar = 1;
                     newNode.Tile = current.node.Connections[direction];
-                    newNode.direction = direction;
                     connections.Add(newNode);
                 }
 
@@ -178,6 +177,5 @@ public class NodeRecord
     public NodeRecord connection { get; set; }
     public float costSoFar { get; set; } = 1;
     public float estimatedTotalCost { get; set; }
-    public DirectionEnum direction { get; set; }
 
 }

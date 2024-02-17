@@ -201,7 +201,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void UpdatePlayerLocation(Vector3 newPosition, Tuple<int,int> newPlayerLoc)
+    public void UpdatePlayerLocation(Vector3 newPosition, Tuple<int,int> newPlayerLoc)
     {
         objectsOnMap[playerLocation].transform.position = newPosition;
         objectsOnMap[newPlayerLoc] = objectsOnMap[playerLocation];
@@ -216,9 +216,10 @@ public class MapManager : MonoBehaviour
         objectsOnMap.Remove(oldLoc);
     }
 
-    public void SetControlledObject(Tuple<int,int> newLoc)
+    public void SetControlledObject(GameObject newPlayer, Tuple<int,int> newLoc)
     {
         playerLocation = newLoc;
+        player = newPlayer;
     }
 
     private void connectTiles(GameObject from, DirectionEnum direction, GameObject to)
