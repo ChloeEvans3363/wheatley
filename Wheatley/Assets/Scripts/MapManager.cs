@@ -254,6 +254,23 @@ public class MapManager : MonoBehaviour
         return floorElements[new Tuple<int, int>(x, z)];
     }
 
+    public DirectionEnum getDirection(Vector2 currentPos, Vector2 newPos)
+    {
+        if(currentPos.x > newPos.x)
+            return DirectionEnum.Left;
+
+        if (currentPos.x < newPos.x)
+            return DirectionEnum.Right;
+
+        if (currentPos.y > newPos.y)
+            return DirectionEnum.Up;
+
+        if (currentPos.y < newPos.y)
+            return DirectionEnum.Down;
+
+        return 0;
+    }
+
     //Trigger Baba-Is-You map reading to determine if new rules have been added
     void UpdateTile() { }
 

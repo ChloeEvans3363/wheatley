@@ -14,14 +14,10 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private GameObject end;
     private float radius = 0.1f;
-
-    // The current tile the character is on.
-    private GameObject CurrentTile { get; set; } = null;
+    private float waitTime = 1f;
 
     // The tile the character is moving to.
     private GameObject TargetTile { get; set; } = null;
-
-    NodeRecord TargetNodeRecord = null;
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +26,7 @@ public class GameManager : MonoBehaviour
         end = MapManager.Instance.end;
 
         Vector3 playerPositon = player.transform.position;
-        CurrentTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
-        TargetTile = CurrentTile;
-        Debug.Log(CurrentTile.transform.position);
+        TargetTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
     }
 
     // Update is called once per frame
@@ -47,7 +41,9 @@ public class GameManager : MonoBehaviour
         {
             Vector3 endPosition = end.transform.position;
             StartCoroutine(HandleInput
-                (CurrentTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
+                (TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
+
+            StartCoroutine(Move());
         }
 
         // Move character
@@ -63,31 +59,25 @@ public class GameManager : MonoBehaviour
                 MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Left);
         }
 
-        //AStar Movement
-        
-        
-        if(path.Count > 0)
-        {
-            Vector3 distance = TargetTile.transform.position - CurrentTile.transform.position;
-
-            if (distance.magnitude < radius)
-            {
-                TargetNodeRecord = path.Pop();
-                TargetTile = TargetNodeRecord.Tile;
-            }
-
-            CurrentTile = TargetTile;
-        }
-        if(TargetNodeRecord != null)
-        {
-            //MapManager.Instance.UpdatePlayerLocation(new );
-        }
-
-        
     }
 
     private IEnumerator HandleInput(GameObject start, GameObject end)
     {
         yield return StartCoroutine(AStar.search(start, end, path));
+    }
+
+    private IEnumerator Move()
+    {
+        while(path.Count > 0)
+        {
+            TargetTile = path.Pop().Tile;
+
+            MapManager.DirectionEnum direction =
+               MapManager.Instance.getDirection(player.transform.position, TargetTile.transform.position);
+
+            MapManager.Instance.MovePlayer(direction);
+
+            yield return new WaitForSeconds(waitTime);
+        }
     }
 }

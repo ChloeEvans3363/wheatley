@@ -99,7 +99,6 @@ public class AStar : MonoBehaviour
             Debug.Log("Search Failed");
         else
         {
-            path.Push(current);
             while(current.node != start.GetComponent<Node>())
             {
                 path.Push(current.connection);
