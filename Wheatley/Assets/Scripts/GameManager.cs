@@ -68,7 +68,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Move()
     {
-        while(path.Count > 0)
+
+        while (path.Count > 0)
         {
             TargetTile = path.Pop().Tile;
 

@@ -27,7 +27,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] GameObject floor;
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject endPrefab;
-    [SerializeField] Tuple<int, int> playerLocation = new Tuple<int, int>(1, 1);
+    [SerializeField] Tuple<int, int> playerLocation = new Tuple<int, int>(1, 5);
     [SerializeField] Tuple<int, int> endLocation = new Tuple<int, int>(7, 4);
     public Dictionary<Tuple<int, int>, GameObject> objectsOnMap;
     public Dictionary<Tuple<int, int>, GameObject> floorElements;
@@ -36,7 +36,7 @@ public class MapManager : MonoBehaviour
 
     public enum DirectionEnum
     {
-        Left, Right, Up, Down
+        Left, Right, Up, Down, Stay
     }
 
     //Base Map Concept
@@ -254,7 +254,7 @@ public class MapManager : MonoBehaviour
         return floorElements[new Tuple<int, int>(x, z)];
     }
 
-    public DirectionEnum getDirection(Vector2 currentPos, Vector2 newPos)
+    public DirectionEnum getDirection(Vector3 currentPos, Vector3 newPos)
     {
         if(currentPos.x > newPos.x)
             return DirectionEnum.Left;
@@ -262,13 +262,13 @@ public class MapManager : MonoBehaviour
         if (currentPos.x < newPos.x)
             return DirectionEnum.Right;
 
-        if (currentPos.y > newPos.y)
-            return DirectionEnum.Up;
-
-        if (currentPos.y < newPos.y)
+        if (currentPos.z > newPos.z)
             return DirectionEnum.Down;
 
-        return 0;
+        if (currentPos.z < newPos.z)
+            return DirectionEnum.Up;
+
+        return DirectionEnum.Stay;
     }
 
     //Trigger Baba-Is-You map reading to determine if new rules have been added
