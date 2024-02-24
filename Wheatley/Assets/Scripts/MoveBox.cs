@@ -41,7 +41,7 @@ public class MoveBox : MonoBehaviour
     {
         if (DetectDropTarget())
         {
-            MapManager.Instance.objectsOnMap.Add(newMapPosition, this.gameObject);
+            MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Add(newMapPosition, this.gameObject);
             //MapManager.Instance.SetControlledObject(this.gameObject, newMapPosition);
             placed = true;
         }
@@ -53,7 +53,7 @@ public class MoveBox : MonoBehaviour
         if (!Physics.Raycast(ray, out var hitInfo, _raycastDistance, _dropTargetLayerMask))
             return false;
         newMapPosition = hitInfo.collider.gameObject.GetComponent<GroundObject>().location;
-        if(MapManager.Instance.objectsOnMap.ContainsKey(newMapPosition))
+        if(MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.ContainsKey(newMapPosition))
             return false;
 
         newPosition = hitInfo.collider.gameObject.transform.position;
