@@ -33,7 +33,7 @@ public class MapManager : MonoBehaviour
     public GameObject end;
 
     public List<Map> mapList = new List<Map>();
-    public int currentMap = 0;
+    public int currentMap;
 
     public enum DirectionEnum
     {
@@ -60,9 +60,6 @@ public class MapManager : MonoBehaviour
             {-1,-1,-1,-1,-1, 0,-1},
             {-1,-1,-1,-1,-1, 1,-1},
             {-1,-1,-1,-1,-1, 1,-1},
-            {-1,-1,-1,-1,-1,-1,-1},
-            {-1,-1,-1,-1,-1,-1,-1},
-            {-1,-1,-1,-1,-1,-1,-1},
     };
 
     int[,] path1 =
@@ -79,6 +76,7 @@ public class MapManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        currentMap = 1;
         mapList.Add(new Map());
         mapList.Add(new Map());
 
@@ -91,7 +89,7 @@ public class MapManager : MonoBehaviour
         }
         for (int i = 0; i < path2.GetLength(1); i++)
         {
-            mapList[1].intendedPath.Add(new Tuple<int, int>(path1[0, i], path1[1, i]));
+            mapList[1].intendedPath.Add(new Tuple<int, int>(path2[0, i], path2[1, i]));
         }
 
         mapList[0].endLocation = new Tuple<int, int>(8, 6);
@@ -100,7 +98,7 @@ public class MapManager : MonoBehaviour
         mapList[0].playerStart = new Tuple<int, int>(0, 6);
         mapList[1].playerStart = new Tuple<int, int>(0, 5);
 
-        loadMap(mapList[0]);
+        loadMap(mapList[currentMap]);
     }
 
     private void loadMap(Map map)
@@ -133,8 +131,8 @@ public class MapManager : MonoBehaviour
 
                 if (i == mapList[currentMap].endLocation.Item1 && j == mapList[currentMap].endLocation.Item2)
                 {
-                    end = Instantiate(endPrefab, new Vector3(i, map.mapHeights[i, j] + 1, j), Quaternion.identity, this.transform);
-                    map.objectsOnMap.Add(new Tuple<int, int>(i, j), end);
+                    end = Instantiate(endPrefab, new Vector3(i, map.mapHeights[i, j] + 0.2f, j), Quaternion.identity, this.transform);
+                    //map.objectsOnMap.Add(new Tuple<int, int>(i, j), end);
                 }
             }
         }
