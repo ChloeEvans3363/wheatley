@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public class MapManager : MonoBehaviour
 {
@@ -42,13 +43,13 @@ public class MapManager : MonoBehaviour
     //Base Map Concept
     int[,] map =
     {
+        {-1,-1,0,0,0,1,2},
+        {-1,-1,0,0,0,0,2},
+        {0,0,0,0,0,0,2},
+        {0,0,0,0,0,0,2},
         {0,0,0,0,0,1,2},
         {0,0,0,0,0,0,2},
-        {0,0,0,0,0,0,2},
-        {0,0,0,0,0,0,2},
-        {0,0,0,0,0,1,2},
-        {0,0,0,0,0,0,2},
-        {0,0,0,0,0,0,2},
+        {0,-1,-1,-1,-1,-1,2},
         {0,0,0,0,0,0,2},
         {0,0,0,0,0,1,2},
     };
@@ -59,12 +60,21 @@ public class MapManager : MonoBehaviour
         objectsOnMap = new Dictionary<Tuple<int, int>, GameObject>();
         floorElements = new Dictionary<Tuple<int, int>, GameObject>();
 
-        createTile(0, 0, new Tuple<int, int>(0, 0));
+        if (map[0, 0] >= 0)
+            createTile(0, 0, new Tuple<int, int>(0, 0));
+        else
+            floorElements.Add(new Tuple<int, int>(0, 0), null);
 
         for (int i = 0; i < map.GetLength(0); i++)
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
+                if (map[i, j] < 0 && !floorElements.ContainsKey(new Tuple<int, int>(i, j)))
+                {
+                    floorElements.Add(new Tuple<int, int>(i, j), null);
+                    continue;
+                }
+
                 GameObject newTile = createTile(i, j, new Tuple<int, int>(i, j));
 
                 
@@ -117,7 +127,7 @@ public class MapManager : MonoBehaviour
     //if no object and available space, move objects 
     bool CheckTile(DirectionEnum direction, Tuple<int,int> pos) 
     {
-        if (0 <= pos.Item1 && pos.Item1 < map.GetLength(0) && 0 <= pos.Item2 && pos.Item2 < map.GetLength(1))
+        if (0 <= pos.Item1 && pos.Item1 < map.GetLength(0) && 0 <= pos.Item2 && pos.Item2 < map.GetLength(1) && map[pos.Item1,pos.Item2] >= 0)
         {
             if (objectsOnMap.ContainsKey(pos))
             {
@@ -142,21 +152,7 @@ public class MapManager : MonoBehaviour
 
                 if (CheckTile(direction, newPos))
                 {
-                    switch (direction)
-                    {
-                        case DirectionEnum.Left:
-                            newPosition = new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
-                            break;
-                        case DirectionEnum.Right:
-                            newPosition = new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
-                            break;
-                        case DirectionEnum.Up:
-                            newPosition = new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
-                            break;
-                        case DirectionEnum.Down:
-                            newPosition = new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
-                            break;
-                    }
+                    newPosition = new Vector3(newPos.Item1, map[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
                     MoveObject(newPosition, pos, newPos);
                     return true;
                 }
