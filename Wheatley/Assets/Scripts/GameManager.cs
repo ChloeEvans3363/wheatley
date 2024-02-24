@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
             Vector3 endPosition = end.transform.position;
+            MapManager.Instance.GenerateConnections();
+
             StartCoroutine(HandleInput
                 (TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
 

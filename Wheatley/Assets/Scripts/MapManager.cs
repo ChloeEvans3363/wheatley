@@ -60,11 +60,6 @@ public class MapManager : MonoBehaviour
         objectsOnMap = new Dictionary<Tuple<int, int>, GameObject>();
         floorElements = new Dictionary<Tuple<int, int>, GameObject>();
 
-        if (map[0, 0] >= 0)
-            createTile(0, 0, new Tuple<int, int>(0, 0));
-        else
-            floorElements.Add(new Tuple<int, int>(0, 0), null);
-
         for (int i = 0; i < map.GetLength(0); i++)
         {
             for (int j = 0; j < map.GetLength(1); j++)
@@ -75,21 +70,7 @@ public class MapManager : MonoBehaviour
                     continue;
                 }
 
-                GameObject newTile = createTile(i, j, new Tuple<int, int>(i, j));
-
-                
-                if (i > 0)
-                    // and the tile above us is not an empty obstacle...
-                    if (floorElements[new Tuple<int, int>(i - 1, j)] != null)
-                        // connect the current tile to the one above.
-                        connectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, newTile);
-
-                // Similarly, if there is at least one column to the left...
-                if (j > 0)
-                    // and the tile to the left is not an empty obstacle...
-                    if (floorElements[new Tuple<int, int>(i, j - 1)] != null)
-                        // connect the current tile to the leftward one.
-                        connectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, newTile);
+                createTile(i, j, new Tuple<int, int>(i, j));
 
                 if (i == playerLocation.Item1 && j == playerLocation.Item2)
                 {
@@ -106,6 +87,33 @@ public class MapManager : MonoBehaviour
         }
 
         Camera.main.transform.position = new Vector3(map.GetUpperBound(0)/2, 10, map.GetLowerBound(1)-3);
+    }
+
+    public void GenerateConnections()
+    {
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                if (map[i, j] < 0)
+                {
+                    continue;
+                }
+
+                if (i > 0)
+                    // and the tile above us is not an empty obstacle...
+                    if (floorElements[new Tuple<int, int>(i - 1, j)] != null && !objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        // connect the current tile to the one above.
+                        connectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, floorElements[new Tuple<int, int>(i,j)]);
+
+                // Similarly, if there is at least one column to the left...
+                if (j > 0)
+                    // and the tile to the left is not an empty obstacle...
+                    if (floorElements[new Tuple<int, int>(i, j - 1)] != null && !objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        // connect the current tile to the leftward one.
+                        connectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, floorElements[new Tuple<int, int>(i, j)]);
+            }
+        }
     }
 
     private GameObject createTile(int x, int y, Tuple<int, int> pos)
