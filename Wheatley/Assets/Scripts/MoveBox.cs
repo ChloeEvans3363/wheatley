@@ -39,10 +39,14 @@ public class MoveBox : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (DetectDropTarget())
+        if (DetectBlock(LayerMask.GetMask("Moveable Block")) && placed)
+        {
+            MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Remove(newMapPosition);
+            Destroy(gameObject);
+        }
+        else if (DetectDropTarget())
         {
             MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Add(newMapPosition, this.gameObject);
-            //MapManager.Instance.SetControlledObject(this.gameObject, newMapPosition);
             placed = true;
         }
     }
@@ -57,6 +61,14 @@ public class MoveBox : MonoBehaviour
             return false;
 
         newPosition = hitInfo.collider.gameObject.transform.position;
+        return true;
+    }
+
+    bool DetectBlock(LayerMask mask)
+    {
+        var ray = Camera.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out var hitInfo, _raycastDistance, mask))
+            return false;
         return true;
     }
 }
