@@ -126,7 +126,7 @@ public class MapManager : MonoBehaviour
                 if (i == playerLocation.Item1 && j == playerLocation.Item2)
                 {
                     player = Instantiate(playerPrefab, new Vector3(i, map.mapHeights[i, j] + 1, j), Quaternion.identity, this.transform);
-                    map.objectsOnMap.Add(new Tuple<int, int>(i, j), player);
+                    //map.objectsOnMap.Add(new Tuple<int, int>(i, j), player);
                 }
 
                 if (i == mapList[currentMap].endLocation.Item1 && j == mapList[currentMap].endLocation.Item2)
@@ -184,72 +184,130 @@ public class MapManager : MonoBehaviour
 
     //Check tile for object, let object recursively call check tile 
     //if no object and available space, move objects 
-    bool CheckTile(DirectionEnum direction, Tuple<int,int> pos) 
+    int CheckTilePlayerMovement(DirectionEnum direction, Tuple<int,int> priorPos, Tuple<int,int> pos)
     {
-        if (0 <= pos.Item1 && pos.Item1 < mapList[currentMap].mapHeights.GetLength(0) && 0 <= pos.Item2 && pos.Item2 < mapList[currentMap].mapHeights.GetLength(1) && mapList[currentMap].mapHeights[pos.Item1,pos.Item2] >= 0)
+
+        if (0 <= pos.Item1 && pos.Item1 < mapList[currentMap].mapHeights.GetLength(0) && 0 <= pos.Item2 && pos.Item2 < mapList[currentMap].mapHeights.GetLength(1) && mapList[currentMap].mapHeights[pos.Item1, pos.Item2] >= 0)
         {
-            if (mapList[currentMap].objectsOnMap.ContainsKey(pos))
+            //if heights are the same
+            if (mapList[currentMap].mapHeights[priorPos.Item1, priorPos.Item2] == mapList[currentMap].mapHeights[pos.Item1, pos.Item2])
             {
-                Tuple<int, int> newPos = pos;
-                Vector3 newPosition = new Vector3();
-
-                switch (direction)
+                //If next tile has block, try to push
+                if (mapList[currentMap].objectsOnMap.ContainsKey(pos))
                 {
-                    case DirectionEnum.Left:
-                        newPos = new Tuple<int, int>(pos.Item1 - 1, pos.Item2);
-                        break;
-                    case DirectionEnum.Right:
-                        newPos = new Tuple<int, int>(pos.Item1 + 1, pos.Item2);
-                        break;
-                    case DirectionEnum.Up:
-                        newPos = new Tuple<int, int>(pos.Item1, pos.Item2 + 1);
-                        break;
-                    case DirectionEnum.Down:
-                        newPos = new Tuple<int, int>(pos.Item1, pos.Item2 - 1);
-                        break;
+                    Tuple<int, int> newPos = pos;
+                    Vector3 newPosition = new Vector3();
+
+                    switch (direction)
+                    {
+                        case DirectionEnum.Left:
+                            newPos = new Tuple<int, int>(pos.Item1 - 1, pos.Item2);
+                            break;
+                        case DirectionEnum.Right:
+                            newPos = new Tuple<int, int>(pos.Item1 + 1, pos.Item2);
+                            break;
+                        case DirectionEnum.Up:
+                            newPos = new Tuple<int, int>(pos.Item1, pos.Item2 + 1);
+                            break;
+                        case DirectionEnum.Down:
+                            newPos = new Tuple<int, int>(pos.Item1, pos.Item2 - 1);
+                            break;
+                    }
+
+                    if (CheckTilePlayerMovement(direction, pos, newPos) != -1)
+                    {
+                        newPosition = new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
+                        MoveObject(newPosition, pos, newPos);
+                        return 1;
+                    }
                 }
-
-                if (CheckTile(direction, newPos))
-                {
-                    newPosition = new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
-                    MoveObject(newPosition, pos, newPos);
-                    return true;
+                
+                //else move
+                else {
+                    return 1;
                 }
             }
-            else
+            //Entering Hole with block in it
+            //Checks if height difference is -1, and if player is the one being checked, and if hole is filled
+            else if ((priorPos == playerLocation && mapList[currentMap].objectsOnMap.ContainsKey(pos) || (priorPos != playerLocation && !mapList[currentMap].objectsOnMap.ContainsKey(pos)))
+                && mapList[currentMap].mapHeights[priorPos.Item1, priorPos.Item2] - 1 == mapList[currentMap].mapHeights[pos.Item1, pos.Item2])
             {
-                return true;
+                return 2;
+            }
+            //Exiting Hole
+            else if (mapList[currentMap].objectsOnMap.ContainsKey(priorPos) && mapList[currentMap].mapHeights[priorPos.Item1, priorPos.Item2] + 1 == mapList[currentMap].mapHeights[pos.Item1, pos.Item2])
+            {
+                //If next tile has block, try to push
+                if (mapList[currentMap].objectsOnMap.ContainsKey(pos))
+                {
+                    Tuple<int, int> newPos = pos;
+                    Vector3 newPosition = new Vector3();
+
+                    switch (direction)
+                    {
+                        case DirectionEnum.Left:
+                            newPos = new Tuple<int, int>(pos.Item1 - 1, pos.Item2);
+                            break;
+                        case DirectionEnum.Right:
+                            newPos = new Tuple<int, int>(pos.Item1 + 1, pos.Item2);
+                            break;
+                        case DirectionEnum.Up:
+                            newPos = new Tuple<int, int>(pos.Item1, pos.Item2 + 1);
+                            break;
+                        case DirectionEnum.Down:
+                            newPos = new Tuple<int, int>(pos.Item1, pos.Item2 - 1);
+                            break;
+                    }
+
+                    if (CheckTilePlayerMovement(direction, pos, newPos) != -1)
+                    {
+                        newPosition = new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
+                        MoveObject(newPosition, pos, newPos);
+                        return 1;
+                    }
+                }
+
+                //else move
+                else
+                {
+                    return 1;
+                }
             }
         }
-        return false;
+        return -1;
     }
     
     //If movement checks succeeded, recursively move all objects that would be pushed by the player
     public void MovePlayer(DirectionEnum direction)
     {
         Tuple<int, int> newPos = playerLocation;
+        int heightOffset;
 
         switch (direction)
         {
             case DirectionEnum.Left:
                 newPos = new Tuple<int, int>(playerLocation.Item1 - 1, playerLocation.Item2);
-                if (CheckTile(direction, newPos))
-                    UpdatePlayerLocation(new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2), newPos);
+                heightOffset = CheckTilePlayerMovement(direction, playerLocation, newPos);
+                if (heightOffset != -1)
+                    UpdatePlayerLocation(new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + heightOffset, newPos.Item2), newPos);
                 break;
             case DirectionEnum.Right:
                 newPos = new Tuple<int, int>(playerLocation.Item1 + 1, playerLocation.Item2);
-                if (CheckTile(direction, newPos))
-                    UpdatePlayerLocation(new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2), newPos); 
+                heightOffset = CheckTilePlayerMovement(direction, playerLocation, newPos);
+                if (heightOffset != -1)
+                    UpdatePlayerLocation(new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + heightOffset, newPos.Item2), newPos); 
                     break;
             case DirectionEnum.Up:
                 newPos = new Tuple<int, int>(playerLocation.Item1, playerLocation.Item2 + 1);
-                if (CheckTile(direction, newPos))
-                    UpdatePlayerLocation(new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2), newPos); 
+                heightOffset = CheckTilePlayerMovement(direction, playerLocation, newPos);
+                if (heightOffset != -1)
+                    UpdatePlayerLocation(new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + heightOffset, newPos.Item2), newPos); 
                 break;
             case DirectionEnum.Down:
                 newPos = new Tuple<int, int>(playerLocation.Item1, playerLocation.Item2 - 1);
-                if (CheckTile(direction, newPos))
-                    UpdatePlayerLocation(new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2), newPos); 
+                heightOffset = CheckTilePlayerMovement(direction, playerLocation, newPos);
+                if (heightOffset != -1)
+                    UpdatePlayerLocation(new Vector3(newPos.Item1, mapList[currentMap].mapHeights[newPos.Item1, newPos.Item2] + heightOffset, newPos.Item2), newPos); 
                 break;
             default:
                 break;
@@ -258,9 +316,10 @@ public class MapManager : MonoBehaviour
 
     public void UpdatePlayerLocation(Vector3 newPosition, Tuple<int,int> newPlayerLoc)
     {
-        mapList[currentMap].objectsOnMap[playerLocation].transform.position = newPosition;
-        mapList[currentMap].objectsOnMap[newPlayerLoc] = mapList[currentMap].objectsOnMap[playerLocation];
-        mapList[currentMap].objectsOnMap.Remove(playerLocation);
+        //mapList[currentMap].objectsOnMap[playerLocation].transform.position = newPosition;
+        //mapList[currentMap].objectsOnMap[newPlayerLoc] = mapList[currentMap].objectsOnMap[playerLocation];
+        //mapList[currentMap].objectsOnMap.Remove(playerLocation);
+        player.transform.position = newPosition;
         playerLocation = newPlayerLoc;
 
         ReadBabaObjectWordConnections();
