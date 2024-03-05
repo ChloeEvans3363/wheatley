@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MoveBox : MonoBehaviour
@@ -16,6 +18,13 @@ public class MoveBox : MonoBehaviour
     [SerializeField] LayerMask _dropTargetLayerMask;
     [SerializeField] LayerMask _ignoreLayerMasks;
 
+    TextMeshPro textMeshPro;
+
+    private void Start()
+    {
+        textMeshPro = gameObject.GetComponentInChildren<TextMeshPro>();
+    }
+
     protected virtual void Awake()
     {
         Camera = Camera.main;
@@ -28,11 +37,13 @@ public class MoveBox : MonoBehaviour
         if (DetectDropTarget())
         {
             gameObject.GetComponent<Renderer>().enabled = true;
+            textMeshPro.GetComponent<Renderer>().enabled = true;
             transform.position = new Vector3(newPosition.x, newPosition.y + 1, newPosition.z);
         }
         else
         {
             gameObject.GetComponent<Renderer>().enabled = false;
+            textMeshPro.GetComponent<Renderer>().enabled = false;
         }
 
     }

@@ -262,6 +262,8 @@ public class MapManager : MonoBehaviour
         mapList[currentMap].objectsOnMap[newPlayerLoc] = mapList[currentMap].objectsOnMap[playerLocation];
         mapList[currentMap].objectsOnMap.Remove(playerLocation);
         playerLocation = newPlayerLoc;
+
+        ReadBabaObjectWordConnections();
     }
 
     void MoveObject(Vector3 newPosition, Tuple<int, int> oldLoc, Tuple<int, int> newLoc)
@@ -324,6 +326,33 @@ public class MapManager : MonoBehaviour
             return DirectionEnum.Up;
 
         return DirectionEnum.Stay;
+    }
+
+    void ReadBabaObjectWordConnections()
+    {
+        Dictionary<Tuple<int, int>, GameObject> objects = mapList[currentMap].objectsOnMap;
+        foreach (Tuple<int,int> key in objects.Keys)
+        {
+            //If Current Object has Word
+            if (objects[key].GetComponent<InteractibleObject>().heldWord != "")
+            {
+                Tuple<int, int> rightPos = new Tuple<int, int>(key.Item1 + 1, key.Item2);
+                Tuple<int, int> bottomPos = new Tuple<int, int>(key.Item1, key.Item2+1);
+
+                if (key.Item1 < mapList[currentMap].mapHeights.GetLength(0) - 2
+                    && objects.ContainsKey(rightPos)
+                    && objects[rightPos].GetComponent<InteractibleObject>().heldWord != "")
+                {
+                    Debug.Log(objects[key].GetComponent<InteractibleObject>().heldWord + objects[rightPos].GetComponent<InteractibleObject>().heldWord);
+                }
+                else if (key.Item1 < mapList[currentMap].mapHeights.GetLength(1) - 2
+                            && objects.ContainsKey(bottomPos)
+                            && objects[bottomPos].GetComponent<InteractibleObject>().heldWord != "")
+                {
+                    Debug.Log(objects[key].GetComponent<InteractibleObject>().heldWord + objects[bottomPos].GetComponent<InteractibleObject>().heldWord);
+                }
+            }
+        }
     }
 
     //Trigger Baba-Is-You map reading to determine if new rules have been added
