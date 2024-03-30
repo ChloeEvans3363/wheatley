@@ -40,11 +40,15 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
             Vector3 endPosition = end.transform.position;
+
+            // Creates the connections on the map
             MapManager.Instance.GenerateConnections();
 
+            // Generates the path using A*
             StartCoroutine(HandleInput
                 (TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
 
+            // Moves the player along the path
             StartCoroutine(Move());
         }
 

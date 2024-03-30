@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveableBlock: {fileID: 5895787365095305930, guid: e76adeb91221d814bb0e51537e9e72f3, type: 3}
-  playerControl: 0
+  playerControl: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
