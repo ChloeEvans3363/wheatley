@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6293172543133247433}
   - component: {fileID: 6905153823501417916}
   - component: {fileID: 6902868370644068528}
+  - component: {fileID: 1698266398198269508}
   m_Layer: 6
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -122,3 +123,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canPush: 1
   heldWord: Dogs
+--- !u!114 &1698266398198269508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2238107481006007574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5362861ac59e6044cafdc2d3d0a8052c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

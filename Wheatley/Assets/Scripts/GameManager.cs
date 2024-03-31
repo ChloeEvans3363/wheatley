@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour
                MapManager.Instance.getDirection(player.transform.position, TargetTile.transform.position);
 
             MapManager.Instance.MovePlayer(direction);
+            //Debug.Log(MapManager.Instance.CanPlayerMove(direction));
 
             yield return new WaitForSeconds(waitTime);
         }
