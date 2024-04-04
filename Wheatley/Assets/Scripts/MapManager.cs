@@ -55,7 +55,7 @@ public class MapManager : MonoBehaviour
     int[,] map2 =
     {
             {-1,-1, 1, 1,-1, 1,-1},
-            {-1, 1, 1, -1, 1, 1,-1},
+            {-1, 1, 1, 1, 1, 1,-1},
             {-1, 1, 1, 1, 1, 1,-1},
             {-1,-1,-1,-1,-1, 0,-1},
             {-1,-1,-1,-1,-1, 1,-1},
@@ -142,7 +142,6 @@ public class MapManager : MonoBehaviour
 
     public void GenerateConnections()
     {
-        int heightOffset;
 
         for (int i = 0; i < mapList[currentMap].mapHeights.GetLength(0); i++)
         {
@@ -155,23 +154,27 @@ public class MapManager : MonoBehaviour
 
                 if (i > 0)
                     // and the tile above us is not an empty obstacle...
-                    if (mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)] != null && !mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                    if (mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)] != null)
                     {
                         // connect the current tile to the one above.
-                        heightOffset = CheckTilePlayerMovement(DirectionEnum.Down, new Tuple<int, int>(i - 1, j), new Tuple<int, int>(i, j));
-                        if (heightOffset != -1)
+                        if (player.transform.position.y - 1 == mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y 
+                            && !mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        {
                             connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                        }
                     }
 
                 // Similarly, if there is at least one column to the left...
                 if (j > 0)
                     // and the tile to the left is not an empty obstacle...
-                    if (mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)] != null && !mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                    if (mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)] != null)
                     {
-                        heightOffset = CheckTilePlayerMovement(DirectionEnum.Right, new Tuple<int, int>(i, j - 1), new Tuple<int, int>(i, j));
-                        if (heightOffset != -1)
+                        if (player.transform.position.y - 1 == mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y
+                            && !mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        {
                             // connect the current tile to the leftward one.
                             connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                        }
                     }
             }
         }
