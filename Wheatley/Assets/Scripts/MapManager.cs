@@ -164,6 +164,8 @@ public class MapManager : MonoBehaviour
                         }
                         else if(mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)) && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)].transform.position.y)
                         {
+                            // Problem right now is that the objects on map are connected to the ground nodes
+                            // But the ground nodes are not connected to the objects on the map
                             connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
                             //connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j)], DirectionEnum.Up, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)]);
                         }
