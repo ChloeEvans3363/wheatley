@@ -63,6 +63,9 @@ public class GameManager : MonoBehaviour
                 MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Right);
             else if (Input.GetKeyDown(KeyCode.A))
                 MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Left);
+
+            Vector3 playerPositon = player.transform.position;
+            TargetTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
         }
 
     }
