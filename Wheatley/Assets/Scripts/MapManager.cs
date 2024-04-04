@@ -162,6 +162,11 @@ public class MapManager : MonoBehaviour
                         {
                             connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
                         }
+                        else if(mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)) && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)].transform.position.y)
+                        {
+                            connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                            //connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j)], DirectionEnum.Up, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)]);
+                        }
                     }
 
                 // Similarly, if there is at least one column to the left...
@@ -174,6 +179,11 @@ public class MapManager : MonoBehaviour
                         {
                             // connect the current tile to the leftward one.
                             connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                        }
+                        else if (mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)) && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j - 1)].transform.position.y)
+                        {
+                            connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                            //connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j)], DirectionEnum.Left, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j - 1)]);
                         }
                     }
             }
