@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
         {
             Vector3 endPosition = end.transform.position;
 
+            // Clears previous connections on map
+            MapManager.Instance.DisconnectTiles();
+
             // Creates the connections on the map
             MapManager.Instance.GenerateConnections();
 

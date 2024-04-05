@@ -156,18 +156,24 @@ public class MapManager : MonoBehaviour
                     // and the tile above us is not an empty obstacle...
                     if (mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)] != null)
                     {
-                        // connect the current tile to the one above.
+                        // Checks if there is an object in the same place and if that object is ground level
+                        // If so connect the ground to the object
                         if (mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)) 
                             && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
                         {
                             connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
+                        // Otherwise if there isn't an object in the way
                         else if (!mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
                         {
+                            // Check if the piece above us has an object on ground level
+                            // If so connect the ground node to that object
                             if(player.transform.position.y - 1 != mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y && mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
                             {
                                 connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
                             }
+                            // Otherwise if the current ground piece is floor level
+                            // Connect the ground piece to another ground piece
                             else if(player.transform.position.y - 1 == mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
                             {
                                 connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
@@ -180,17 +186,24 @@ public class MapManager : MonoBehaviour
                     // and the tile to the left is not an empty obstacle...
                     if (mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)] != null)
                     {
+                        // Checks if there is an object in the same place and if that object is ground level
+                        // If so connect the ground to the object
                         if (mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
                             && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
                         {
                             connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
+                        // Otherwise if there isn't an object in the way
                         else if (!mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
                         {
+                            // Check if the piece to the left has an object on ground level
+                            // If so connect the ground node to that object
                             if (player.transform.position.y - 1 != mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y && mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
                             {
                                 connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
                             }
+                            // Otherwise if the current ground piece is floor level
+                            // Connect the ground piece to another ground piece
                             else if (player.transform.position.y - 1 == mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
                             {
                                 connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
@@ -435,6 +448,32 @@ public class MapManager : MonoBehaviour
         else if(direction == DirectionEnum.Right)
         {
             toNode.Connections.Add(DirectionEnum.Left, from);
+        }
+    }
+
+    public void DisconnectTiles()
+    {
+        // Loops through all the blocks in a level
+        for (int i = 0; i < mapList[currentMap].mapHeights.GetLength(0); i++)
+        {
+            for (int j = 0; j < mapList[currentMap].mapHeights.GetLength(1); j++)
+            {
+                // Check floor block connections
+                if (mapList[currentMap].floorElements.ContainsKey(new Tuple<int, int>(i, j)) &&
+                    mapList[currentMap].floorElements[new Tuple<int, int>(i, j)] != null)
+                {
+                    // Clears connections for the ground blocks
+                    mapList[currentMap].floorElements[new Tuple<int, int>(i, j)].GetComponent<Node>().Connections.Clear();
+                }
+
+                // Checks object block connections
+                if (mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)) &&
+                    mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)] != null)
+                {
+                    // Clears connections for the object blocks
+                    mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)].GetComponent<Node>().Connections.Clear();
+                }
+            }
         }
     }
 
