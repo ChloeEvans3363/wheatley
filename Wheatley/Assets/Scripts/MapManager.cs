@@ -157,17 +157,21 @@ public class MapManager : MonoBehaviour
                     if (mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)] != null)
                     {
                         // connect the current tile to the one above.
-                        if (player.transform.position.y - 1 == mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y 
-                            && !mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        if (mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)) 
+                            && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
                         {
-                            connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                            connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
-                        else if(mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)) && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)].transform.position.y)
+                        else if (!mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
                         {
-                            // Problem right now is that the objects on map are connected to the ground nodes
-                            // But the ground nodes are not connected to the objects on the map
-                            connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
-                            //connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j)], DirectionEnum.Up, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)]);
+                            if(player.transform.position.y - 1 != mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y && mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
+                            {
+                                connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                            }
+                            else if(player.transform.position.y - 1 == mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
+                            {
+                                connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                            }
                         }
                     }
 
@@ -176,16 +180,21 @@ public class MapManager : MonoBehaviour
                     // and the tile to the left is not an empty obstacle...
                     if (mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)] != null)
                     {
-                        if (player.transform.position.y - 1 == mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y
-                            && !mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        if (mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
+                            && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
                         {
-                            // connect the current tile to the leftward one.
-                            connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                            connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
-                        else if (mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)) && player.transform.position.y - 1 == mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j - 1)].transform.position.y)
+                        else if (!mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
                         {
-                            connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
-                            //connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j)], DirectionEnum.Left, mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j - 1)]);
+                            if (player.transform.position.y - 1 != mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y && mapList[currentMap].objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
+                            {
+                                connectTiles(mapList[currentMap].objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                            }
+                            else if (player.transform.position.y - 1 == mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
+                            {
+                                connectTiles(mapList[currentMap].floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, mapList[currentMap].floorElements[new Tuple<int, int>(i, j)]);
+                            }
                         }
                     }
             }
