@@ -42,8 +42,7 @@ public class MoveBox : MonoBehaviour
         }
         else
         {
-            gameObject.GetComponent<Renderer>().enabled = false;
-            textMeshPro.GetComponent<Renderer>().enabled = false;
+            transform.position = new Vector3(0, 0, -2.3f);
         }
 
     }
