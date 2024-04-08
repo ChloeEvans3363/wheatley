@@ -482,7 +482,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press "1" to Place a block
+  m_text: Click on a block to place it
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9d43373ec7ff109479e5d80fda788d0a, type: 2}
   m_sharedMaterial: {fileID: -6815666742255313679, guid: 9d43373ec7ff109479e5d80fda788d0a, type: 2}
@@ -592,6 +592,7 @@ MonoBehaviour:
   floor: {fileID: 1313186528508554042, guid: 79d9c40f90f4f484fb1a4e3bbc86f323, type: 3}
   playerPrefab: {fileID: 2238107481006007574, guid: 5b280842ce4d4bc439ae2d1bcdeb5b58, type: 3}
   endPrefab: {fileID: 1984702990544173879, guid: 02229f3a3b6448a48abc583b501b1043, type: 3}
+  moveableBlock: {fileID: 5895787365095305930, guid: e76adeb91221d814bb0e51537e9e72f3, type: 3}
   player: {fileID: 0}
   end: {fileID: 0}
   currentMap: 0
@@ -622,7 +623,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44cf44229f41bd74e84701e23f47c915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveableBlock: {fileID: 5895787365095305930, guid: e76adeb91221d814bb0e51537e9e72f3, type: 3}
   playerControl: 1
 --- !u!1 &963194225
 GameObject:

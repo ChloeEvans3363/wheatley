@@ -29,11 +29,15 @@ public class MapManager : MonoBehaviour
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject endPrefab;
     [SerializeField] Tuple<int, int> playerLocation = new Tuple<int, int>(0, 6);
+    [SerializeField] GameObject moveableBlock;
     public GameObject player;
     public GameObject end;
 
     public List<Map> mapList = new List<Map>();
     public int currentMap;
+
+    //Tracks which block should be placed
+    public int selectedBlock = -1;
 
     public enum DirectionEnum
     {
@@ -82,6 +86,9 @@ public class MapManager : MonoBehaviour
 
         mapList[0].mapHeights = map1;
         mapList[1].mapHeights = map2;
+
+        mapList[0].numBoxes = 1;
+        mapList[1].numBoxes = 2;
 
         for (int i = 0; i < path1.GetLength(1); i++)
         {
@@ -138,6 +145,13 @@ public class MapManager : MonoBehaviour
         }
 
         Camera.main.transform.position = new Vector3(map.mapHeights.GetUpperBound(0) / 2, 10, map.mapHeights.GetLowerBound(1) - 3);
+
+        for(int i = 0; i < mapList[currentMap].numBoxes; i++)
+        {
+            GameObject block =  Instantiate(moveableBlock, new Vector3(i, 0, -2.3f), Quaternion.identity, this.transform);
+            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(i, 0, -2.3f);
+            block.GetComponent<MoveBox>().mapIdentity = i+1;
+        }
     }
 
     public void GenerateConnections()
@@ -544,6 +558,8 @@ public class Map
     public List<Tuple<int, int>> intendedPath { get; set; } = new List<Tuple<int, int>>();
     public Tuple<int, int> endLocation { get; set; }
     public Tuple<int, int> playerStart { get; set; }
+
+    public int numBoxes;
 
     public Map()
     {

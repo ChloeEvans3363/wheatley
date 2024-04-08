@@ -20,6 +20,9 @@ public class MoveBox : MonoBehaviour
 
     TextMeshPro textMeshPro;
 
+    public Vector3 deselectedLocation;
+    public int mapIdentity;
+
     private void Start()
     {
         textMeshPro = gameObject.GetComponentInChildren<TextMeshPro>();
@@ -34,7 +37,7 @@ public class MoveBox : MonoBehaviour
     void Update()
     {
         if(placed) return;
-        if (DetectDropTarget())
+        if (MapManager.Instance.selectedBlock == mapIdentity && DetectDropTarget())
         {
             gameObject.GetComponent<Renderer>().enabled = true;
             textMeshPro.GetComponent<Renderer>().enabled = true;
@@ -42,7 +45,7 @@ public class MoveBox : MonoBehaviour
         }
         else
         {
-            transform.position = new Vector3(0, 0, -2.3f);
+            transform.position = deselectedLocation;
         }
 
     }
@@ -52,11 +55,16 @@ public class MoveBox : MonoBehaviour
         if (DetectBlock(LayerMask.GetMask("Moveable Block")) && placed)
         {
             MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Remove(newMapPosition);
-            Destroy(gameObject);
+            placed = false;
+        }
+        else if (DetectBlock(LayerMask.GetMask("Moveable Block")) && !placed && mapIdentity != MapManager.Instance.selectedBlock)
+        {
+            MapManager.Instance.selectedBlock = mapIdentity;
         }
         else if (DetectDropTarget())
         {
             MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Add(newMapPosition, this.gameObject);
+            MapManager.Instance.selectedBlock = -1;
             placed = true;
         }
     }

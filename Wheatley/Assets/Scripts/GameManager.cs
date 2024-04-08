@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject moveableBlock;
     [SerializeField] bool playerControl = false;
 
     private Vector3 blockSpawnPos = new Vector3(-6.64f, 1f, 2.56f);
@@ -32,11 +31,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            GameObject block = Instantiate(moveableBlock, blockSpawnPos, Quaternion.identity, this.transform);
-        }
-
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
             Vector3 endPosition = end.transform.position;
