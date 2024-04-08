@@ -31,6 +31,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ManageScenes.Instance.ReloadScene();
+        }
+
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
             Vector3 endPosition = end.transform.position;
