@@ -28,7 +28,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] GameObject floor;
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject endPrefab;
-    [SerializeField] Tuple<int, int> playerLocation = new Tuple<int, int>(0, 6);
+    [SerializeField] public Tuple<int, int> playerLocation = new Tuple<int, int>(0, 6);
     [SerializeField] GameObject moveableBlock;
     public GameObject player;
     public GameObject end;
@@ -405,9 +405,6 @@ public class MapManager : MonoBehaviour
                 heightOffset = CheckTilePlayerMovement(direction, playerLocation, newPos);
                 if (heightOffset != -1)
                     return true;
-                break;
-            default:
-                return true;
                 break;
         }
 

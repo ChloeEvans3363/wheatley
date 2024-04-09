@@ -36,7 +36,7 @@ public class MoveBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(placed) return;
+        if (placed) return;
         if (MapManager.Instance.selectedBlock == mapIdentity && DetectDropTarget())
         {
             gameObject.GetComponent<Renderer>().enabled = true;
@@ -72,11 +72,20 @@ public class MoveBox : MonoBehaviour
     bool DetectDropTarget()
     {
         var ray = Camera.ScreenPointToRay(Input.mousePosition);
-        if (!Physics.Raycast(ray, out var hitInfo, _raycastDistance, _dropTargetLayerMask))
+        if (!Physics.Raycast(ray, out var hitInfo, _raycastDistance, _dropTargetLayerMask) || !hitInfo.collider.gameObject.GetComponent<GroundObject>())
             return false;
-        newMapPosition = hitInfo.collider.gameObject.GetComponent<GroundObject>().location;
-        if(MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.ContainsKey(newMapPosition))
+        else
+        {
+            newMapPosition = hitInfo.collider.gameObject.GetComponent<GroundObject>().location;
+        }
+
+        Tuple<int, int> endloc = MapManager.Instance.mapList[MapManager.Instance.currentMap].endLocation;
+        if (MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.ContainsKey(newMapPosition)
+            || (newMapPosition.Item1 == endloc.Item1 && newMapPosition.Item2 == endloc.Item2)
+            || (newMapPosition.Item1 == MapManager.Instance.playerLocation.Item1 && newMapPosition.Item2 == MapManager.Instance.playerLocation.Item2))
+        {
             return false;
+        }
 
         newPosition = hitInfo.collider.gameObject.transform.position;
         return true;
