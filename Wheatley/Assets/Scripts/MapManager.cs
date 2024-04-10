@@ -81,11 +81,8 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         currentMap = 1;
-        mapList.Add(new Map());
-        mapList.Add(new Map());
-
-        mapList[0].mapHeights = map1;
-        mapList[1].mapHeights = map2;
+        mapList.Add(new Map(map1, new Tuple<int, int>(0, 6), new Tuple<int, int>(8, 6)));
+        mapList.Add(new Map(map2, new Tuple<int, int>(0, 5), new Tuple<int, int>(5, 5)));
 
         mapList[0].numBoxes = 1;
         mapList[1].numBoxes = 2;
@@ -98,12 +95,6 @@ public class MapManager : MonoBehaviour
         {
             mapList[1].intendedPath.Add(new Tuple<int, int>(path2[0, i], path2[1, i]));
         }
-
-        mapList[0].endLocation = new Tuple<int, int>(8, 6);
-        mapList[1].endLocation = new Tuple<int, int>(5, 5);
-
-        mapList[0].playerStart = new Tuple<int, int>(0, 6);
-        mapList[1].playerStart = new Tuple<int, int>(0, 5);
 
         loadMap(mapList[currentMap]);
     }
@@ -553,13 +544,14 @@ public class Map
     public Dictionary<Tuple<int, int>, GameObject> floorElements { get; set; } = new Dictionary<Tuple<int, int>, GameObject>();
     public int[,] mapHeights { get; set; }
     public List<Tuple<int, int>> intendedPath { get; set; } = new List<Tuple<int, int>>();
-    public Tuple<int, int> endLocation { get; set; }
     public Tuple<int, int> playerStart { get; set; }
-
+    public Tuple<int, int> endLocation { get; set; }
     public int numBoxes;
 
-    public Map()
+    public Map(int[,] mapHeights, Tuple<int, int> playerStart, Tuple<int, int> endLocation)
     {
-
+        this.mapHeights = mapHeights;
+        this.playerStart = playerStart;
+        this.endLocation = endLocation;
     }
 }

@@ -56,22 +56,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            /*Map currentMap = MapManager.Instance.mapList[MapManager.Instance.currentMap];
-            for (int i = 0; i < currentMap.mapHeights.GetLength(0); i++)
-            {
-                for (int j = 0; j < currentMap.mapHeights.GetLength(1); j++)
-                {
 
-                }
-            }*/
-
-            //Vector2 initialPlayerLocation = new Vector2(MapManager.Instance.mapList[MapManager.Instance.currentMap].playerStart.Item1, MapManager.Instance.mapList[MapManager.Instance.currentMap].playerStart.Item2);
-            //Vector2 initialGoalLocation = new Vector2(MapManager.Instance.mapList[MapManager.Instance.currentMap].playerStart.Item1, MapManager.Instance.mapList[MapManager.Instance.currentMap].playerStart.Item2);
-            List<MapManager.DirectionEnum> solution = AStarPush.SolveSokoban(MapManager.Instance.mapList[MapManager.Instance.currentMap].mapHeights, new Vector2(0, 5), new Vector2(1, 3), new Vector2(3, 5));
-            for (int i = 0; i < solution.Count; i++)
-            {
-                Debug.Log("Step " + i + ": " + solution[i]);
-            }
         }
 
         // Move character

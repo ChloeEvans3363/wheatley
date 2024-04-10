@@ -5,9 +5,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static MapManager;
 
-public class AStarPush : MonoBehaviour
+public class PushBoxSearch : MonoBehaviour
 {
-
     public class State
     {
         public Vector2 playerPos;
@@ -34,7 +33,7 @@ public class AStarPush : MonoBehaviour
         }
     }
 
-    public static List<DirectionEnum> SolveSokoban(int[,] map, Vector2 initialPlayerPos, Vector2 initialCratePos, Vector2 goalPos)
+    public static List<DirectionEnum> PushBoxPathSearch(int[,] map, Vector2 initialPlayerPos, Vector2 initialCratePos, Vector2 goalPos)
     {
         Queue<State> queue = new Queue<State>();
         HashSet<State> visited = new HashSet<State>();
@@ -134,55 +133,5 @@ public class AStarPush : MonoBehaviour
         }
 
         return true;
-    }
-
-    private static NodeRecord smallestElement(List<NodeRecord> nodes, GameObject start, GameObject end)
-    {
-        NodeRecord smallest = nodes[0];
-
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            if (CrossProduct(start, nodes[i].Tile, end) + nodes[i].costSoFar < CrossProduct(start, smallest.Tile, end) + smallest.costSoFar)
-            {
-                smallest = nodes[i];
-            }
-        }
-
-        return smallest;
-    }
-
-    private static bool Contains(List<NodeRecord> nodeRecords, Node node)
-    {
-        foreach (NodeRecord nodeRecord in nodeRecords)
-        {
-            if (nodeRecord.node == node)
-                return true;
-        }
-        return false;
-    }
-
-    private static NodeRecord Find(List<NodeRecord> nodeRecords, Node node)
-    {
-        foreach (NodeRecord nodeRecord in nodeRecords)
-        {
-            if (nodeRecord.node == node)
-                return nodeRecord;
-        }
-        return null;
-    }
-
-    public static float CrossProduct(GameObject start, GameObject tile, GameObject goal)
-    {
-        float dx1 = tile.transform.position.x - goal.transform.position.x;
-        float dy1 = tile.transform.position.y - goal.transform.position.y;
-        float dx2 = start.transform.position.x - goal.transform.position.x;
-        float dy2 = start.transform.position.y - goal.transform.position.y;
-        float cross = Math.Abs(dx1 * dy2 - dx2 * dy1);
-
-        // Manhattan
-        float dx = Math.Abs(tile.transform.position.x - goal.transform.position.x);
-        float dy = Math.Abs(tile.transform.position.y - goal.transform.position.y);
-
-        return (dx + dy) + cross * 0.001f;
     }
 }
