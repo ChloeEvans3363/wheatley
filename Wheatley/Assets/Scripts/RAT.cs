@@ -13,15 +13,26 @@ public class RAT : MonoBehaviour
         Action
     }
 
+    public AIStates state;
+
+    public List<Action> actions = new List<Action>();
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        state = AIStates.Move;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        switch(state)
+        {
+            case AIStates.Move:
+                break;
+
+            case AIStates.Action:
+                break;
+        }
     }
 }
