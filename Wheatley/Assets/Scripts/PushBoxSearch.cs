@@ -102,6 +102,14 @@ public class PushBoxSearch : MonoBehaviour
         return null;
     }
 
+    public static bool CanPushBox(int[,] map, Vector2 initialPlayerPos, Vector2 initialCratePos, Vector2 goalPos)
+    {
+        if (PushBoxPathSearch(map, initialPlayerPos, initialCratePos, goalPos) == null)
+            return false;
+
+        return true;
+    }
+
     public static DirectionEnum GetDirection(Vector2 from, Vector2 to)
     {
         if (to.x > from.x)

@@ -116,8 +116,7 @@ public class AStar : MonoBehaviour
 
     public static bool CanFindPath(GameObject start, GameObject end)
     {
-        Stack<DirectionEnum> path = Search(start, end);
-        if (path == null)
+        if (Search(start, end) == null)
             return false;
         return true;
     }
