@@ -6,7 +6,7 @@ using static MapManager;
 
 public class AStar : MonoBehaviour
 {
-    public static IEnumerator search(GameObject start, GameObject end, Stack<NodeRecord> path = null)
+    public static Stack<NodeRecord> Search(GameObject start, GameObject end, Stack<NodeRecord> path = null)
     {
         NodeRecord startRecord = new NodeRecord();
         startRecord.node = start.GetComponent<Node>();
@@ -107,9 +107,11 @@ public class AStar : MonoBehaviour
             }
 
             Debug.Log("Path Length: " + path.Count);
+
+            return path;
         }
 
-        yield return null;
+        return null;
     }
 
     private static NodeRecord smallestElement(List<NodeRecord> nodes, GameObject start, GameObject end)

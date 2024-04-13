@@ -47,11 +47,15 @@ public class GameManager : MonoBehaviour
             MapManager.Instance.GenerateConnections();
 
             // Generates the path using A*
+            /*
             StartCoroutine(HandleInput
                 (TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
+            */
+            path = AStar.Search(TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z), path);
 
             // Moves the player along the path
-            StartCoroutine(Move());
+            if(path != null)
+                StartCoroutine(Move());
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
@@ -77,11 +81,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private IEnumerator HandleInput(GameObject start, GameObject end)
-    {
-        yield return StartCoroutine(AStar.search(start, end, path));
-    }
-
     private IEnumerator Move()
     {
 
@@ -93,7 +92,6 @@ public class GameManager : MonoBehaviour
                MapManager.Instance.getDirection(player.transform.position, TargetTile.transform.position);
 
             MapManager.Instance.MovePlayer(direction);
-            //Debug.Log(MapManager.Instance.CanPlayerMove(direction));
 
             yield return new WaitForSeconds(waitTime);
         }
