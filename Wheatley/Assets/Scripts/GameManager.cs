@@ -52,10 +52,11 @@ public class GameManager : MonoBehaviour
             StartCoroutine(HandleInput
                 (TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
             */
-            path = AStar.Search(TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z), path);
+            path = AStar.Search(TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z));
 
+            Debug.Log(AStar.CanFindPath(TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
             // Moves the player along the path
-            if(path != null)
+            if (path != null)
                 StartCoroutine(Move());
         }
 

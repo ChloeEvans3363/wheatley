@@ -6,7 +6,7 @@ using static MapManager;
 
 public class AStar : MonoBehaviour
 {
-    public static Stack<DirectionEnum> Search(GameObject start, GameObject end, Stack<DirectionEnum> path = null)
+    public static Stack<DirectionEnum> Search(GameObject start, GameObject end)
     {
         NodeRecord startRecord = new NodeRecord();
         startRecord.node = start.GetComponent<Node>();
@@ -20,8 +20,7 @@ public class AStar : MonoBehaviour
         Node endNode = new Node();
         float endNodeCost = 0;
         NodeRecord endNodeRecord = new NodeRecord();
-        if(path == null)
-            path = new Stack<DirectionEnum>();
+        Stack<DirectionEnum> path = new Stack<DirectionEnum>();
         float endNodeHeuristic = 0;
 
         List<NodeRecord> open = new List<NodeRecord>();
@@ -113,6 +112,14 @@ public class AStar : MonoBehaviour
         }
 
         return null;
+    }
+
+    public static bool CanFindPath(GameObject start, GameObject end)
+    {
+        Stack<DirectionEnum> path = Search(start, end);
+        if (path == null)
+            return false;
+        return true;
     }
 
     private static NodeRecord smallestElement(List<NodeRecord> nodes, GameObject start, GameObject end)
