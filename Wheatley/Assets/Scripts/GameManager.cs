@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using static MapManager;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] bool playerControl = false;
 
     private Vector3 blockSpawnPos = new Vector3(-6.64f, 1f, 2.56f);
-    Stack<NodeRecord> path = new Stack<NodeRecord>();
+    Stack<DirectionEnum> path = new Stack<DirectionEnum>();
 
     private GameObject player;
     private GameObject end;
@@ -83,16 +84,9 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Move()
     {
-
         while (path.Count > 0)
         {
-            TargetTile = path.Pop().Tile;
-
-            MapManager.DirectionEnum direction =
-               MapManager.Instance.getDirection(player.transform.position, TargetTile.transform.position);
-
-            MapManager.Instance.MovePlayer(direction);
-
+            MapManager.Instance.MovePlayer(path.Pop());
             yield return new WaitForSeconds(waitTime);
         }
     }

@@ -6,7 +6,7 @@ using static MapManager;
 
 public class AStar : MonoBehaviour
 {
-    public static Stack<NodeRecord> Search(GameObject start, GameObject end, Stack<NodeRecord> path = null)
+    public static Stack<DirectionEnum> Search(GameObject start, GameObject end, Stack<DirectionEnum> path = null)
     {
         NodeRecord startRecord = new NodeRecord();
         startRecord.node = start.GetComponent<Node>();
@@ -21,7 +21,7 @@ public class AStar : MonoBehaviour
         float endNodeCost = 0;
         NodeRecord endNodeRecord = new NodeRecord();
         if(path == null)
-            path = new Stack<NodeRecord> ();
+            path = new Stack<DirectionEnum>();
         float endNodeHeuristic = 0;
 
         List<NodeRecord> open = new List<NodeRecord>();
@@ -99,10 +99,11 @@ public class AStar : MonoBehaviour
             Debug.Log("Search Failed");
         else
         {
-            path.Push(current);
+            // It's just nice to have the ai stand for a second
+            path.Push(DirectionEnum.Stay);
             while (current.node != start.GetComponent<Node>())
             {
-                path.Push(current.connection);
+                path.Push(GetDirection(current.connection.Tile, current.Tile));
                 current = current.connection;
             }
 
@@ -162,6 +163,24 @@ public class AStar : MonoBehaviour
         float dy = Math.Abs(tile.transform.position.y - goal.transform.position.y);
 
         return (dx + dy) + cross * 0.001f;
+    }
+
+
+
+    public static DirectionEnum GetDirection(GameObject from, GameObject to)
+    {
+        Vector3 toPos = to.transform.position;
+        Vector3 fromPos = from.transform.position;
+
+        if (toPos.x > fromPos.x)
+            return DirectionEnum.Right;
+        if (toPos.x < fromPos.x)
+            return DirectionEnum.Left;
+        if (toPos.z > fromPos.z)
+            return DirectionEnum.Up;
+        if (toPos.z < fromPos.z)
+            return DirectionEnum.Down;
+        return DirectionEnum.Stay;
     }
 }
 
