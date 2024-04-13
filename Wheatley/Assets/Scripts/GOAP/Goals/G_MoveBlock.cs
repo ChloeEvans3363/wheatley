@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class G_MoveBlock : MonoBehaviour
+public class G_MoveBlock : Goal
 {
-    // Start is called before the first frame update
-    void Start()
+    public override int OnCalculatePriority()
     {
-        
+        return -1;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override bool CanRun()
     {
-        
+        return false;
     }
 }

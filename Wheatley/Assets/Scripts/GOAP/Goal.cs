@@ -1,18 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MapManager;
 
-public class Goal : MonoBehaviour
+public interface IGoal
 {
-    // Start is called before the first frame update
-    void Start()
+    public int OnCalculatePriority();
+    public bool CanRun();
+    public void OnTickGoal();
+    public void OnGoalActivated();
+    public void OnGoalDeactivated();
+}
+
+public class Goal : MonoBehaviour, IGoal
+{
+    public virtual int OnCalculatePriority()
     {
-        
+        return -1;
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual bool CanRun()
     {
-        
+        return false;
+    }
+
+    public virtual void OnTickGoal()
+    {
+
+    }
+
+    public virtual void OnGoalActivated()
+    {
+
+    }
+
+    public virtual void OnGoalDeactivated()
+    {
+
     }
 }
