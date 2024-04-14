@@ -8,7 +8,7 @@ public class G_Win : Goal
     // Getting to the win is always the top priority
     private int priority = 20;
 
-    public override int OnCalculatePriority()
+    public override int CalculatePriority()
     {
         return priority;
     }
@@ -19,5 +19,7 @@ public class G_Win : Goal
         Vector3 playerPositon = MapManager.Instance.player.transform.position;
         GameObject start = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
         return AStar.CanFindPath(start, end);
+
+        // if false, set all other goals to have a higher priority
     }
 }

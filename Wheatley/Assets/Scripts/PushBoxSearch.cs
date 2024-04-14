@@ -110,6 +110,11 @@ public class PushBoxSearch : MonoBehaviour
         return true;
     }
 
+    public static int GetCost(int[,] map, Vector2 initialPlayerPos, Vector2 initialCratePos, Vector2 goalPos)
+    {
+        return PushBoxPathSearch(map, initialPlayerPos, initialCratePos, goalPos).Count;
+    }
+
     public static DirectionEnum GetDirection(Vector2 from, Vector2 to)
     {
         if (to.x > from.x)

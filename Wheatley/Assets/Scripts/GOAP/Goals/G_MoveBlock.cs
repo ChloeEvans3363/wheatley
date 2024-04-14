@@ -11,12 +11,19 @@ public class G_MoveBlock : Goal
     private float priorityBuildRate = 1f;
     private float currentPriority = 0f;
 
+    // Find a way to get this from world state
     public GameObject end;
     public GameObject box;
 
-    public override int OnCalculatePriority()
+    public override int CalculatePriority()
     {
+        // TODO: Calculate priority based on if there are any
+        // Movable boxes on the field
         return Mathf.FloorToInt(currentPriority);
+    }
+    public override void OnGoalActivated()
+    {
+        currentPriority = maxPriority;
     }
 
     public override bool CanRun()

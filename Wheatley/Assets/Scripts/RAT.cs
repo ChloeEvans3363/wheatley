@@ -15,7 +15,7 @@ public class RAT : MonoBehaviour
 
     public AIStates state;
 
-    public List<Action> actions = new List<Action>();
+    //public List<Action> actions = new List<Action>();
 
     // Start is called before the first frame update
     void Start()

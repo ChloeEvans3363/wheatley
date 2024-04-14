@@ -121,6 +121,11 @@ public class AStar : MonoBehaviour
         return true;
     }
 
+    public static int GetCost(GameObject start, GameObject end)
+    {
+        return Search(start, end).Count;
+    }
+
     private static NodeRecord smallestElement(List<NodeRecord> nodes, GameObject start, GameObject end)
     {
         NodeRecord smallest = nodes[0];

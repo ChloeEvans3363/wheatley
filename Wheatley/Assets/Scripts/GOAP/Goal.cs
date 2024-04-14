@@ -5,16 +5,17 @@ using static MapManager;
 
 public interface IGoal
 {
-    public int OnCalculatePriority();
+    public int CalculatePriority();
     public bool CanRun();
-    public void OnTickGoal();
     public void OnGoalActivated();
     public void OnGoalDeactivated();
 }
 
 public class Goal : MonoBehaviour, IGoal
 {
-    public virtual int OnCalculatePriority()
+    protected Action LinkedAction;
+
+    public virtual int CalculatePriority()
     {
         return -1;
     }
@@ -24,16 +25,13 @@ public class Goal : MonoBehaviour, IGoal
         return false;
     }
 
-    public virtual void OnTickGoal()
-    {
-
-    }
-
+    // Consider linking an action to the goal here
     public virtual void OnGoalActivated()
     {
 
     }
 
+    // Consider unlinking an action to the goal here
     public virtual void OnGoalDeactivated()
     {
 
