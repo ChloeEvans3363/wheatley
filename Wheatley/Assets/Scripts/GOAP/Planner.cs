@@ -4,18 +4,25 @@ using UnityEngine;
 
 public class Planner : MonoBehaviour
 {
-    [SerializeField]
     Goal[] goals;
 
-    [SerializeField]
     Action[] actions;
 
     private Goal activeGoal;
     private Action activeAction;
 
-    public Goal mainGoal;
-
+    // Just using this right now to prevent errors
+    // while I redo the goap system
     WorldState test;
+
+    // Right now the goals and actions are set by having
+    // all the goals and actions on the same prefab
+    // I may change this if there is time/ I find a better way
+    private void Awake()
+    {
+        goals = GetComponents<Goal>();
+        actions = GetComponents<Action>();
+    }
 
     // Start is called before the first frame update
     void Start()

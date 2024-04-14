@@ -27,6 +27,9 @@ public class G_MoveBlock : Goal
         currentPriority = maxPriority;
     }
 
+    // TODO: Change this so that it instead says that the
+    // goal is satisfied when the block location is equal
+    // to the given location
     public override bool Satisfied(WorldState state)
     {
         Vector2 playerPositon = state.playerTile.transform.position;
