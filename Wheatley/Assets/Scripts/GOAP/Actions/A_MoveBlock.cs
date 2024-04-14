@@ -17,7 +17,22 @@ public class A_MoveBlock : Action
         return SupportedGoals;
     }
 
-    public override float GetCost()
+    public override bool PreconditionsMet(WorldState state)
+    {
+        if(state.objectsOnMap != null)
+        {
+            Vector2 playerPositon = state.playerTile.transform.position;
+            Vector2 endPos = state.endTile.transform.position;
+            Vector2 cratePos = box.transform.position;
+
+            Map map = MapManager.Instance.mapList[MapManager.Instance.currentMap];
+
+            return PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos);
+        }
+        return false;
+    }
+
+    public override float GetCost(WorldState state)
     {
         Vector2 playerPositon = MapManager.Instance.player.transform.position;
         Vector2 endPos = end.transform.position;
@@ -28,8 +43,8 @@ public class A_MoveBlock : Action
         return PushBoxSearch.GetCost(map.mapHeights, playerPositon, cratePos, endPos);
     }
 
-    // TODO: Make this return some kind of info to the world state
-    public override void OnActivated()
+    // TODO: Make change the crate location in the world state
+    public override void OnActivated(WorldState state)
     {
         Vector2 playerPositon = MapManager.Instance.player.transform.position;
         Vector2 endPos = end.transform.position;

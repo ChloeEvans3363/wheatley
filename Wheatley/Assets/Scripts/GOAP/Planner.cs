@@ -10,13 +10,39 @@ public class Planner : MonoBehaviour
     [SerializeField]
     Action[] actions;
 
-    Goal activeGoal;
-    Action activeAction;
+    private Goal activeGoal;
+    private Action activeAction;
+
+    public Goal mainGoal;
+
+    WorldState test;
 
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    public List<Action> plan(WorldState initialState)
+    {
+        List<WorldState> states = new List<WorldState>();
+        List<Action> actions = new List<Action>();
+
+        List<Action> currentPlan = new List<Action>();
+        states.Add(initialState);
+        WorldState currentState = initialState;
+        float cost = 0;
+        int currentDepth = 0;
+
+        // Do some kind of while statement to check
+        // if the current world state has the player
+        // at the end
+        while (!currentState.GoalAchieved())
+        {
+
+        }
+
+        return null;
     }
 
     // Update is called once per frame
@@ -31,7 +57,7 @@ public class Planner : MonoBehaviour
         {
             // Checks if the goal can run
             // If not then skip it
-            if (!goal.CanRun())
+            if (!goal.Satisfied(test))
                 continue;
 
             // Is it a better priority?
@@ -42,11 +68,12 @@ public class Planner : MonoBehaviour
             Action currentAction = null;
             foreach(Action action in actions)
             {
+                // Checks if the action supports the current goal
                 if (!action.GetSupportedGoals().Contains(goal.GetType()))
                     continue;
 
                 // Found a suitable action
-                if(currentAction == null || action.GetCost() < currentAction.GetCost())
+                if(currentAction == null || action.GetCost(test) < currentAction.GetCost(test))
                     currentAction = action;
             }
 
@@ -68,7 +95,7 @@ public class Planner : MonoBehaviour
             if (activeGoal != null)
                 activeGoal.OnGoalActivated();
             if (activeAction != null)
-                activeAction.OnActivated();
+                activeAction.OnActivated(test);
 
         } // No change
         else if(activeGoal == bestGoal)
@@ -78,7 +105,7 @@ public class Planner : MonoBehaviour
             {
                 activeAction.OnDeactived();
                 activeAction = bestAction;
-                activeAction.OnActivated();
+                activeAction.OnActivated(test);
             }
         } // new goal or no valid goal?
         else if(activeGoal != bestGoal)
@@ -92,7 +119,7 @@ public class Planner : MonoBehaviour
             if(activeGoal != null)
                 activeGoal.OnGoalActivated();
             if (activeAction != null)
-                activeAction.OnActivated();
+                activeAction.OnActivated(test);
         }
     }
 }

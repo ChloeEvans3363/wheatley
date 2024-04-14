@@ -10,21 +10,30 @@ public class A_GoToWin : Action
     {
         return SupportedGoals;
     }
-
-    public override float GetCost()
+    public override bool PreconditionsMet(WorldState state)
     {
-        GameObject end = MapManager.Instance.end;
-        Vector3 playerPositon = MapManager.Instance.player.transform.position;
-        GameObject start = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
+        GameObject end = state.endTile;
+        GameObject start = state.playerTile;
+        return AStar.CanFindPath(start, end);
+    }
+
+    public override float GetCost(WorldState state)
+    {
+        GameObject end = state.endTile;
+        GameObject start = state.playerTile;
         return AStar.GetCost(start, end);
     }
 
-    // TODO: Make this return some kind of info to the world state
-    public override void OnActivated()
+    public override void OnActivated(WorldState state)
     {
+        /*
         GameObject end = MapManager.Instance.end;
         Vector3 playerPositon = MapManager.Instance.player.transform.position;
         GameObject start = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
         AStar.Search(start, end);
+        */
+
+        // Sets the player to be at the end
+        state.playerTile.transform.position = state.playerTile.transform.position;
     }
 }

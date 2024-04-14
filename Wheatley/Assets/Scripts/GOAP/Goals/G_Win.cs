@@ -13,12 +13,11 @@ public class G_Win : Goal
         return priority;
     }
 
-    public override bool CanRun()
+    public override bool Satisfied(WorldState state)
     {
-        GameObject end = MapManager.Instance.end;
-        Vector3 playerPositon = MapManager.Instance.player.transform.position;
-        GameObject start = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
-        return AStar.CanFindPath(start, end);
+        if (state.playerTile.transform.position == state.endTile.transform.position)
+            return true;
+        return false;
 
         // if false, set all other goals to have a higher priority
     }

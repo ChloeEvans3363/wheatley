@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Action : MonoBehaviour
+public class Action
 {
     // May change to not use a string
     // Since strings are not the most efficient
@@ -19,13 +19,18 @@ public class Action : MonoBehaviour
         return null;
     }
 
-    public virtual float GetCost()
+    public virtual float GetCost(WorldState state)
     {
         return 0f;
     }
 
+    public virtual bool PreconditionsMet(WorldState state)
+    {
+        return false;
+    }
+
     // Consider linking a goal to the action here
-    public virtual void OnActivated()
+    public virtual void OnActivated(WorldState state)
     {
 
     }

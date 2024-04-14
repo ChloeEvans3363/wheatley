@@ -6,7 +6,7 @@ using static MapManager;
 public interface IGoal
 {
     public int CalculatePriority();
-    public bool CanRun();
+    public bool Satisfied(WorldState state);
     public void OnGoalActivated();
     public void OnGoalDeactivated();
 }
@@ -20,7 +20,7 @@ public class Goal : MonoBehaviour, IGoal
         return -1;
     }
 
-    public virtual bool CanRun()
+    public virtual bool Satisfied(WorldState state)
     {
         return false;
     }

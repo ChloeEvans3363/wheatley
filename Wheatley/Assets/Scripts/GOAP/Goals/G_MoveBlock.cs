@@ -19,17 +19,18 @@ public class G_MoveBlock : Goal
     {
         // TODO: Calculate priority based on if there are any
         // Movable boxes on the field
-        return Mathf.FloorToInt(currentPriority);
+        //return Mathf.FloorToInt(currentPriority);
+        return 1;
     }
     public override void OnGoalActivated()
     {
         currentPriority = maxPriority;
     }
 
-    public override bool CanRun()
+    public override bool Satisfied(WorldState state)
     {
-        Vector2 playerPositon = MapManager.Instance.player.transform.position;
-        Vector2 endPos = end.transform.position;
+        Vector2 playerPositon = state.playerTile.transform.position;
+        Vector2 endPos = state.endTile.transform.position;
         Vector2 cratePos = box.transform.position;
 
         Map map = MapManager.Instance.mapList[MapManager.Instance.currentMap];
