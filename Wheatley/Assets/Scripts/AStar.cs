@@ -95,7 +95,10 @@ public class AStar : MonoBehaviour
 
         // Determine whether A* found a path and print it here.
         if (current.node != end.GetComponent<Node>())
+        {
             Debug.Log("Search Failed");
+            ManageScenes.Instance.DisplaySearchFailed();
+        }
         else
         {
             // It's just nice to have the ai stand for a second

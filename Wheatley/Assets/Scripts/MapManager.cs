@@ -84,8 +84,11 @@ public class MapManager : MonoBehaviour
         mapList.Add(new Map(map1, new Tuple<int, int>(0, 6), new Tuple<int, int>(8, 6)));
         mapList.Add(new Map(map2, new Tuple<int, int>(0, 5), new Tuple<int, int>(5, 5)));
 
-        mapList[0].numBoxes = 1;
-        mapList[1].numBoxes = 2;
+        mapList[0].numPushBoxes = 1;
+        mapList[0].numImmovableBoxes = 0;
+
+        mapList[1].numPushBoxes = 1;
+        mapList[1].numImmovableBoxes = 1;
 
         for (int i = 0; i < path1.GetLength(1); i++)
         {
@@ -137,11 +140,22 @@ public class MapManager : MonoBehaviour
 
         Camera.main.transform.position = new Vector3(map.mapHeights.GetUpperBound(0) / 2, 10, map.mapHeights.GetLowerBound(1) - 3);
 
-        for(int i = 0; i < mapList[currentMap].numBoxes; i++)
+        for(int i = 0; i < mapList[currentMap].numPushBoxes; i++)
         {
             GameObject block =  Instantiate(moveableBlock, new Vector3(i, 0, -2.3f), Quaternion.identity, this.transform);
+            block.GetComponent<InteractibleObject>().canPush = true;
+            block.GetComponent<InteractibleObject>().UpdateTint();
             block.GetComponent<MoveBox>().deselectedLocation = new Vector3(i, 0, -2.3f);
             block.GetComponent<MoveBox>().mapIdentity = i+1;
+        }
+
+        for (int i = mapList[currentMap].numPushBoxes; i < mapList[currentMap].numImmovableBoxes+ mapList[currentMap].numPushBoxes; i++)
+        {
+            GameObject block = Instantiate(moveableBlock, new Vector3(i+0.2f, 0, -2.3f), Quaternion.identity, this.transform);
+            block.GetComponent<InteractibleObject>().canPush = false;
+            block.GetComponent<InteractibleObject>().UpdateTint();
+            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(i + 0.2f, 0, -2.3f);
+            block.GetComponent<MoveBox>().mapIdentity = i + 1;
         }
     }
 
@@ -546,7 +560,8 @@ public class Map
     public List<Tuple<int, int>> intendedPath { get; set; } = new List<Tuple<int, int>>();
     public Tuple<int, int> playerStart { get; set; }
     public Tuple<int, int> endLocation { get; set; }
-    public int numBoxes;
+    public int numPushBoxes;
+    public int numImmovableBoxes;
 
     public Map(int[,] mapHeights, Tuple<int, int> playerStart, Tuple<int, int> endLocation)
     {

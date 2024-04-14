@@ -9,6 +9,9 @@ public class ManageScenes : MonoBehaviour
 
     public static ManageScenes Instance { get { return _instance; } }
 
+    [SerializeField] GameObject SearchFailedText;
+    [SerializeField] GameObject SearchSucceededText;
+    public bool needsToRestart = false;
 
     private void Awake()
     {
@@ -41,5 +44,17 @@ public class ManageScenes : MonoBehaviour
     {
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
+    }
+
+    public void DisplaySearchFailed()
+    {
+        SearchFailedText.SetActive(true);
+        needsToRestart = true;
+    }
+
+    public void DisplaySuccess()
+    {
+        SearchSucceededText.SetActive(true);
+        needsToRestart = true;
     }
 }
