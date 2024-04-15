@@ -7,7 +7,7 @@ public class MapData : MonoBehaviour
 {
     public static List<Map> mapList = new List<Map>();
 
-    void Start()
+    void Awake()
     {
         int[,] mapHeights1 =
         {
