@@ -36,7 +36,7 @@ public class G_MoveBlock : Goal
         Vector2 endPos = state.endTile.transform.position;
         Vector2 cratePos = box.transform.position;
 
-        Map map = MapManager.Instance.mapList[MapManager.Instance.currentMap];
+        Map map = MapManager.Instance.currentMap;
 
         return PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos);
     }

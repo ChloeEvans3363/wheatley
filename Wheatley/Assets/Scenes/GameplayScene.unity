@@ -1107,6 +1107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 934417699}
+  - component: {fileID: 934417701}
   - component: {fileID: 934417698}
   - component: {fileID: 934417700}
   m_Layer: 0
@@ -1134,7 +1135,7 @@ MonoBehaviour:
   moveableBlock: {fileID: 5895787365095305930, guid: e76adeb91221d814bb0e51537e9e72f3, type: 3}
   player: {fileID: 0}
   end: {fileID: 0}
-  currentMap: 0
+  currentMapIndex: 0
   selectedBlock: -1
 --- !u!4 &934417699
 Transform:
@@ -1164,6 +1165,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerControl: 1
+--- !u!114 &934417701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934417697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9688794f35e616e49977ca4f374678cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1924,8 +1937,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 578edad5080862043a90c5372510f49a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SearchFailedText: {fileID: 25112825}
-  SearchSucceededText: {fileID: 1417164161}
+  SearchFailedText: {fileID: 0}
+  SearchSucceededText: {fileID: 0}
   needsToRestart: 0
 --- !u!1 &1820835394
 GameObject:

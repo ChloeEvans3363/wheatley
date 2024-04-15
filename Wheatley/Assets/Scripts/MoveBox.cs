@@ -56,7 +56,7 @@ public class MoveBox : MonoBehaviour
     {
         if (DetectBlock(LayerMask.GetMask("Moveable Block")) && placed)
         {
-            MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Remove(newMapPosition);
+            MapManager.Instance.currentMap.objectsOnMap.Remove(newMapPosition);
             placed = false;
         }
         else if (DetectBlock(LayerMask.GetMask("Moveable Block")) && !placed && mapIdentity != MapManager.Instance.selectedBlock)
@@ -65,7 +65,7 @@ public class MoveBox : MonoBehaviour
         }
         else if (DetectDropTarget())
         {
-            MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Add(newMapPosition, this.gameObject);
+            MapManager.Instance.currentMap.objectsOnMap.Add(newMapPosition, this.gameObject);
             MapManager.Instance.selectedBlock = -1;
             placed = true;
         }
@@ -81,8 +81,8 @@ public class MoveBox : MonoBehaviour
             newMapPosition = hitInfo.collider.gameObject.GetComponent<GroundObject>().location;
         }
 
-        Tuple<int, int> endloc = MapManager.Instance.mapList[MapManager.Instance.currentMap].endLocation;
-        if (MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.ContainsKey(newMapPosition)
+        Tuple<int, int> endloc = MapManager.Instance.currentMap.endLocation;
+        if (MapManager.Instance.currentMap.objectsOnMap.ContainsKey(newMapPosition)
             || (newMapPosition.Item1 == endloc.Item1 && newMapPosition.Item2 == endloc.Item2)
             || (newMapPosition.Item1 == MapManager.Instance.playerLocation.Item1 && newMapPosition.Item2 == MapManager.Instance.playerLocation.Item2))
         {
