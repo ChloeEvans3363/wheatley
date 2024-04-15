@@ -90,18 +90,18 @@ public class MapManager : MonoBehaviour
 
         Camera.main.transform.position = new Vector3(map.mapHeights.GetUpperBound(0) / 2, 10, map.mapHeights.GetLowerBound(1) - 3);
 
-        for(int i = 0; i < map.numBoxes; i++)
+        for (int i = 0; i < map.numPushBoxes; i++)
         {
-            GameObject block =  Instantiate(moveableBlock, new Vector3(i, 0, -2.3f), Quaternion.identity, this.transform);
+            GameObject block = Instantiate(moveableBlock, new Vector3(i, 0, -2.3f), Quaternion.identity, this.transform);
             block.GetComponent<InteractibleObject>().canPush = true;
             block.GetComponent<InteractibleObject>().UpdateTint();
             block.GetComponent<MoveBox>().deselectedLocation = new Vector3(i, 0, -2.3f);
-            block.GetComponent<MoveBox>().mapIdentity = i+1;
+            block.GetComponent<MoveBox>().mapIdentity = i + 1;
         }
 
-        for (int i = mapList[currentMap].numPushBoxes; i < mapList[currentMap].numImmovableBoxes+ mapList[currentMap].numPushBoxes; i++)
+        for (int i = map.numPushBoxes; i < map.numImmoveableBoxes + map.numPushBoxes; i++)
         {
-            GameObject block = Instantiate(moveableBlock, new Vector3(i+0.2f, 0, -2.3f), Quaternion.identity, this.transform);
+            GameObject block = Instantiate(moveableBlock, new Vector3(i + 0.2f, 0, -2.3f), Quaternion.identity, this.transform);
             block.GetComponent<InteractibleObject>().canPush = false;
             block.GetComponent<InteractibleObject>().UpdateTint();
             block.GetComponent<MoveBox>().deselectedLocation = new Vector3(i + 0.2f, 0, -2.3f);
