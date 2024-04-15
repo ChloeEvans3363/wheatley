@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.512}
+  m_AnchoredPosition: {x: 0, y: 0.501}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &5269025413244495216
@@ -302,6 +302,8 @@ MonoBehaviour:
   _ignoreLayerMasks:
     serializedVersion: 2
     m_Bits: 192
+  deselectedLocation: {x: 0, y: 0, z: 0}
+  mapIdentity: 0
 --- !u!114 &3656145164351390250
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,12 +22,12 @@ public class MoveBox : MonoBehaviour
 
     public Vector3 deselectedLocation;
     public int mapIdentity;
-
-    bool isTinted = false;
+    InteractibleObject interactibleObject;
 
     private void Start()
     {
         textMeshPro = gameObject.GetComponentInChildren<TextMeshPro>();
+        interactibleObject = gameObject.GetComponent<InteractibleObject>();
     }
 
     protected virtual void Awake()
@@ -58,6 +58,11 @@ public class MoveBox : MonoBehaviour
         {
             MapManager.Instance.currentMap.objectsOnMap.Remove(newMapPosition);
             placed = false;
+
+            if (interactibleObject.canPush)
+                ManageScenes.Instance.UpdateNumPushBlocks(1);
+            else
+                ManageScenes.Instance.UpdateNumImmovableBlocks(1);
         }
         else if (DetectBlock(LayerMask.GetMask("Moveable Block")) && !placed && mapIdentity != MapManager.Instance.selectedBlock)
         {
@@ -68,6 +73,11 @@ public class MoveBox : MonoBehaviour
             MapManager.Instance.currentMap.objectsOnMap.Add(newMapPosition, this.gameObject);
             MapManager.Instance.selectedBlock = -1;
             placed = true;
+
+            if (interactibleObject.canPush)
+                ManageScenes.Instance.UpdateNumPushBlocks(-1);
+            else
+                ManageScenes.Instance.UpdateNumImmovableBlocks(-1);
         }
     }
 
