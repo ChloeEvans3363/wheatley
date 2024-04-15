@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Planner : MonoBehaviour
+public class Planner
 {
     Goal[] goals;
 
@@ -20,8 +20,8 @@ public class Planner : MonoBehaviour
     // I may change this if there is time/ I find a better way
     private void Awake()
     {
-        goals = GetComponents<Goal>();
-        actions = GetComponents<Action>();
+        //goals = GetComponents<Goal>();
+        //actions = GetComponents<Action>();
     }
 
     // Start is called before the first frame update
@@ -30,7 +30,7 @@ public class Planner : MonoBehaviour
         
     }
 
-    public List<Action> plan(WorldState state, int maxDepth)
+    public static Action[] plan(WorldState state, int maxDepth)
     {
         WorldState[] states = new WorldState[maxDepth + 1];
         List<Action> actions = new List<Action>();
@@ -77,13 +77,14 @@ public class Planner : MonoBehaviour
             }
         }
 
-        return null;
+        return currentPlan;
     }
 
     // This is another version of goap that will probably not stay
     // Update is called once per frame
     void Update()
     {
+        /*
         Goal bestGoal = null;
         Action bestAction = null;
 
@@ -157,5 +158,6 @@ public class Planner : MonoBehaviour
             if (activeAction != null)
                 activeAction.OnActivated(test);
         }
+         */
     }
 }

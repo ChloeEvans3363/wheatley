@@ -71,20 +71,21 @@ public class A_MoveBlock : Action
         WorldState successorState = state.Clone();
         Map map = MapManager.Instance.currentMap;
 
-        if (state.pits.Count > 0 && state.moveableBlocks.Count > 0)
+        if (successorState.pits.Count > 0 && successorState.moveableBlocks.Count > 0)
         {
-            Vector2 playerPositon = state.playerTile.transform.position;
+            Vector2 playerPositon = successorState.playerTile.transform.position;
 
-            foreach (GameObject block in state.moveableBlocks.Values)
+            foreach (var bKey in successorState.moveableBlocks.Keys)
             {
-                foreach (GameObject pit in state.pits.Values)
+                foreach (var pKey in successorState.pits.Keys)
                 {
-                    Vector2 endPos = pit.transform.position;
-                    Vector2 cratePos = block.transform.position;
+                    Vector2 endPos = successorState.pits[pKey].transform.position;
+                    Vector2 cratePos = successorState.moveableBlocks[bKey].transform.position;
 
                     if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
                     {
-
+                        successorState.moveableBlocks[bKey].transform.position =
+                            successorState.pits[pKey].transform.position;
                     }
                 }
             }

@@ -48,12 +48,12 @@ public class PushBoxSearch : MonoBehaviour
         {
             State currentState = queue.Dequeue();
 
-            Debug.Log("Exploring state: Player at " + currentState.playerPos + ", Crate at " + currentState.cratePos);
+            //Debug.Log("Exploring state: Player at " + currentState.playerPos + ", Crate at " + currentState.cratePos);
 
             // Check if crate is at the goal position
             if (currentState.cratePos.x == goalPos.x && currentState.cratePos.y == goalPos.y)
             {
-                Debug.Log("Goal reached!");
+                //Debug.Log("Goal reached!");
                 return moves[currentState];
             }
 
@@ -81,7 +81,7 @@ public class PushBoxSearch : MonoBehaviour
                         newState.cratePos = newCratePos;
                     }
 
-                    Debug.Log("Move: Player at " + move + ", Crate at " + newState.cratePos);
+                    //Debug.Log("Move: Player at " + move + ", Crate at " + newState.cratePos);
 
                     // Mark the new state as visited and enqueue it
                     if (!visited.Contains(newState))

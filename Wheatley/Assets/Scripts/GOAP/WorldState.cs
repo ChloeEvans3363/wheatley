@@ -39,6 +39,9 @@ public class WorldState
         floorElements = map.floorElements;
         objectsOnMap = map.objectsOnMap;
 
+        Goals = new List<Goal>();
+        Actions = new List<Action>();
+
         GetMoveableBlocks();
         GetPits();
 
@@ -110,7 +113,7 @@ public class WorldState
 
         foreach (var key in objectsOnMap.Keys)
         {
-            if(objectsOnMap[key].tag == "MoveableBlock")
+            if(objectsOnMap[key] != null && objectsOnMap[key].tag == "MoveableBlock")
                 moveableBlocks.Add(key, objectsOnMap[key]);
         }
     }
@@ -121,7 +124,7 @@ public class WorldState
         foreach (var key in floorElements.Keys)
         {
             // This is the y level for pit blocks
-            if(floorElements[key].transform.position.y == 0)
+            if(floorElements[key] != null && floorElements[key].transform.position.y == 0)
                 pits.Add(key, floorElements[key]);
         }
     }
