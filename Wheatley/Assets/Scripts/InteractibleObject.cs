@@ -27,4 +27,16 @@ public class InteractibleObject : MonoBehaviour
         if (text != null)
             text.text = heldWord;
     }
+
+    public void UpdateTint()
+    {
+        if (!canPush)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.grey;
+        }
+        else
+        {
+            GetComponent<MeshRenderer>().material.color = Color.cyan;
+        }
+    }
 }

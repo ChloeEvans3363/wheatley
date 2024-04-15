@@ -38,7 +38,7 @@ public class MoveBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (placed) return;
+        if (placed || ManageScenes.Instance.needsToRestart) return;
         if (MapManager.Instance.selectedBlock == mapIdentity && DetectDropTarget())
         {
             gameObject.GetComponent<Renderer>().enabled = true;
@@ -48,12 +48,6 @@ public class MoveBox : MonoBehaviour
         else
         {
             transform.position = deselectedLocation;
-
-            if(isTinted && mapIdentity != MapManager.Instance.selectedBlock)
-            {
-                isTinted = false;
-                GetComponent<MeshRenderer>().material.color = Color.white;
-            }
         }
 
     }
@@ -63,22 +57,16 @@ public class MoveBox : MonoBehaviour
         if (DetectBlock(LayerMask.GetMask("Moveable Block")) && placed)
         {
             MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Remove(newMapPosition);
-            GetComponent<MeshRenderer>().material.color = Color.white;
-            isTinted = false;
             placed = false;
         }
         else if (DetectBlock(LayerMask.GetMask("Moveable Block")) && !placed && mapIdentity != MapManager.Instance.selectedBlock)
         {
             MapManager.Instance.selectedBlock = mapIdentity;
-            GetComponent<MeshRenderer>().material.color = Color.cyan;
-            isTinted = true;
         }
         else if (DetectDropTarget())
         {
             MapManager.Instance.mapList[MapManager.Instance.currentMap].objectsOnMap.Add(newMapPosition, this.gameObject);
             MapManager.Instance.selectedBlock = -1;
-            GetComponent<MeshRenderer>().material.color = Color.white;
-            isTinted = false;
             placed = true;
         }
     }

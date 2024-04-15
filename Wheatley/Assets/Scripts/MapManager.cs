@@ -93,8 +93,19 @@ public class MapManager : MonoBehaviour
         for(int i = 0; i < map.numBoxes; i++)
         {
             GameObject block =  Instantiate(moveableBlock, new Vector3(i, 0, -2.3f), Quaternion.identity, this.transform);
+            block.GetComponent<InteractibleObject>().canPush = true;
+            block.GetComponent<InteractibleObject>().UpdateTint();
             block.GetComponent<MoveBox>().deselectedLocation = new Vector3(i, 0, -2.3f);
             block.GetComponent<MoveBox>().mapIdentity = i+1;
+        }
+
+        for (int i = mapList[currentMap].numPushBoxes; i < mapList[currentMap].numImmovableBoxes+ mapList[currentMap].numPushBoxes; i++)
+        {
+            GameObject block = Instantiate(moveableBlock, new Vector3(i+0.2f, 0, -2.3f), Quaternion.identity, this.transform);
+            block.GetComponent<InteractibleObject>().canPush = false;
+            block.GetComponent<InteractibleObject>().UpdateTint();
+            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(i + 0.2f, 0, -2.3f);
+            block.GetComponent<MoveBox>().mapIdentity = i + 1;
         }
     }
 
