@@ -35,10 +35,11 @@ public class Planner : MonoBehaviour
         WorldState[] states = new WorldState[maxDepth + 1];
         List<Action> actions = new List<Action>();
 
-        List<Action> currentPlan = new List<Action>();
+        Action[] currentPlan = new Action[maxDepth];
         states[0] = state;
         WorldState currentState = state;
         float cost = 0;
+        float bestContentment = float.MinValue;
         int currentDepth = 0;
 
         // Do some kind of while statement to check
@@ -47,9 +48,17 @@ public class Planner : MonoBehaviour
         //!currentState.GoalAchieved()
         while (currentDepth >= 0)
         {
+            // This is the part that adds the highest contentment plan
+            // to the current plan list
             if(currentDepth >= maxDepth)
             {
-                float currentCost = states[currentDepth].GetContentment();
+                float currentContentment = states[currentDepth].GetContentment();
+
+                if(currentContentment > bestContentment)
+                {
+                    actions.CopyTo(currentPlan, 0);
+                }
+                currentDepth -= 1;
             }
 
             // This is really the main part of GOAP
@@ -59,14 +68,19 @@ public class Planner : MonoBehaviour
 
                 if (nextAction != null)
                 {
-                    //states[currentDepth + 1] = nextAction
+                    states[currentDepth + 1] = nextAction.OnActivated(states[currentDepth]);
+                    actions[currentDepth] = nextAction;
+                    currentDepth += 1;
                 }
+                else
+                    currentDepth -= 1;
             }
         }
 
         return null;
     }
 
+    // This is another version of goap that will probably not stay
     // Update is called once per frame
     void Update()
     {

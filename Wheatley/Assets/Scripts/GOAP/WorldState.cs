@@ -34,11 +34,10 @@ public class WorldState
     {
         Vector3 playerPositon = MapManager.Instance.player.transform.position;
         playerTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
+        endTile = MapManager.Instance.end;
 
         floorElements = map.floorElements;
         objectsOnMap = map.objectsOnMap;
-
-        endTile = MapManager.Instance.end;
 
         GetMoveableBlocks();
         GetPits();
@@ -48,6 +47,20 @@ public class WorldState
 
         Actions.Add(new A_GoToWin());
         Actions.Add(new A_MoveBlock());
+    }
+
+    public WorldState(WorldState state)
+    {
+        playerTile = state.playerTile;
+        floorElements = state.floorElements;
+        objectsOnMap = state.objectsOnMap;
+        endTile = state.endTile;
+
+        moveableBlocks = state.moveableBlocks;
+        pits = state.pits;
+
+        Goals = new List<Goal>(state.Goals);
+        Actions = new List<Action>(state.Actions);
     }
 
     public float GetContentment()
@@ -77,6 +90,12 @@ public class WorldState
         foreach(Action action in Actions)
             if(action.PreconditionsMet(this))
                 SatisfiedActions.Push(action);
+    }
+
+    public WorldState Clone()
+    {
+        WorldState stateClone = new WorldState(this);
+        return stateClone;
     }
 
     public bool GoalAchieved()

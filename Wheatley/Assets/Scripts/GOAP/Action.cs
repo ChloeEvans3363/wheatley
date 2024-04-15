@@ -30,9 +30,9 @@ public class Action
     }
 
     // Consider linking a goal to the action here
-    public virtual void OnActivated(WorldState state)
+    public virtual WorldState OnActivated(WorldState state)
     {
-
+        return null;
     }
 
     // Consider unlinking a goal to the action here

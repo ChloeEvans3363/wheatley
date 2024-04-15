@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class A_GoToWin : Action
@@ -24,16 +25,13 @@ public class A_GoToWin : Action
         return AStar.GetCost(start, end);
     }
 
-    public override void OnActivated(WorldState state)
+    public override WorldState OnActivated(WorldState state)
     {
-        /*
-        GameObject end = MapManager.Instance.end;
-        Vector3 playerPositon = MapManager.Instance.player.transform.position;
-        GameObject start = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
-        AStar.Search(start, end);
-        */
+        WorldState successorState = state.Clone();
 
         // Sets the player to be at the end
-        state.playerTile.transform.position = state.playerTile.transform.position;
+        successorState.playerTile.transform.position = successorState.playerTile.transform.position;
+
+        return successorState;
     }
 }

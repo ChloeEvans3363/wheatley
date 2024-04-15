@@ -6,9 +6,6 @@ using UnityEngine.UIElements;
 
 public class A_MoveBlock : Action
 {
-    // Find a way to get this from world state
-    public GameObject end;
-    public GameObject box;
 
     // Change this later
     List<System.Type> SupportedGoals = new List<System.Type>() { typeof(G_MoveBlock) };
@@ -19,39 +16,80 @@ public class A_MoveBlock : Action
 
     public override bool PreconditionsMet(WorldState state)
     {
-        if(state.objectsOnMap != null)
+        Map map = MapManager.Instance.currentMap;
+
+        if (state.pits.Count > 0 && state.moveableBlocks.Count > 0)
         {
             Vector2 playerPositon = state.playerTile.transform.position;
-            Vector2 endPos = state.endTile.transform.position;
-            Vector2 cratePos = box.transform.position;
 
-            Map map = MapManager.Instance.currentMap;
+            foreach(GameObject block in state.moveableBlocks.Values)
+            {
+                foreach(GameObject pit in state.pits.Values)
+                {
+                    Vector2 endPos = pit.transform.position;
+                    Vector2 cratePos = block.transform.position;
 
-            return PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos);
+                    if(PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
+                    {
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
 
     public override float GetCost(WorldState state)
     {
-        Vector2 playerPositon = MapManager.Instance.player.transform.position;
-        Vector2 endPos = end.transform.position;
-        Vector2 cratePos = box.transform.position;
-
         Map map = MapManager.Instance.currentMap;
 
-        return PushBoxSearch.GetCost(map.mapHeights, playerPositon, cratePos, endPos);
+        if (state.pits.Count > 0 && state.moveableBlocks.Count > 0)
+        {
+            Vector2 playerPositon = state.playerTile.transform.position;
+
+            foreach (GameObject block in state.moveableBlocks.Values)
+            {
+                foreach (GameObject pit in state.pits.Values)
+                {
+                    Vector2 endPos = pit.transform.position;
+                    Vector2 cratePos = block.transform.position;
+
+                    if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
+                    {
+                        return PushBoxSearch.GetCost(map.mapHeights, playerPositon, cratePos, endPos);
+                    }
+                }
+            }
+        }
+
+        return 0;
     }
 
     // TODO: Make change the crate location in the world state
-    public override void OnActivated(WorldState state)
+    public override WorldState OnActivated(WorldState state)
     {
-        Vector2 playerPositon = MapManager.Instance.player.transform.position;
-        Vector2 endPos = end.transform.position;
-        Vector2 cratePos = box.transform.position;
-
+        WorldState successorState = state.Clone();
         Map map = MapManager.Instance.currentMap;
 
-        PushBoxSearch.PushBoxPathSearch(map.mapHeights, playerPositon, cratePos, endPos);
+        if (state.pits.Count > 0 && state.moveableBlocks.Count > 0)
+        {
+            Vector2 playerPositon = state.playerTile.transform.position;
+
+            foreach (GameObject block in state.moveableBlocks.Values)
+            {
+                foreach (GameObject pit in state.pits.Values)
+                {
+                    Vector2 endPos = pit.transform.position;
+                    Vector2 cratePos = block.transform.position;
+
+                    if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
+                    {
+
+                    }
+                }
+            }
+        }
+
+        return successorState;
     }
 }
