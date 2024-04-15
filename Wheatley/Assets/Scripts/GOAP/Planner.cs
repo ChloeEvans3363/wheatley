@@ -30,23 +30,38 @@ public class Planner : MonoBehaviour
         
     }
 
-    public List<Action> plan(WorldState initialState)
+    public List<Action> plan(WorldState state, int maxDepth)
     {
-        List<WorldState> states = new List<WorldState>();
+        WorldState[] states = new WorldState[maxDepth + 1];
         List<Action> actions = new List<Action>();
 
         List<Action> currentPlan = new List<Action>();
-        states.Add(initialState);
-        WorldState currentState = initialState;
+        states[0] = state;
+        WorldState currentState = state;
         float cost = 0;
         int currentDepth = 0;
 
         // Do some kind of while statement to check
         // if the current world state has the player
         // at the end
-        while (!currentState.GoalAchieved())
+        //!currentState.GoalAchieved()
+        while (currentDepth >= 0)
         {
+            if(currentDepth >= maxDepth)
+            {
+                float currentCost = states[currentDepth].GetContentment();
+            }
 
+            // This is really the main part of GOAP
+            else
+            {
+                Action nextAction = states[currentDepth].NextAction();
+
+                if (nextAction != null)
+                {
+                    //states[currentDepth + 1] = nextAction
+                }
+            }
         }
 
         return null;

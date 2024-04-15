@@ -11,6 +11,8 @@ public class G_MoveBlock : Goal
     private float priorityBuildRate = 1f;
     private float currentPriority = 0f;
 
+    private float contentment = 0;
+
     // Find a way to get this from world state
     public GameObject end;
     public GameObject box;
@@ -22,6 +24,12 @@ public class G_MoveBlock : Goal
         //return Mathf.FloorToInt(currentPriority);
         return 1;
     }
+
+    public override float Contentment()
+    {
+        return contentment;
+    }
+
     public override void OnGoalActivated()
     {
         currentPriority = maxPriority;
