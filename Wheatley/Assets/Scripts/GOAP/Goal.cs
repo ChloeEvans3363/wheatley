@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static MapManager;
 
-public interface IGoal
-{
-    public float Contentment();
-}
-
-public class Goal : MonoBehaviour, IGoal
+public class Goal : MonoBehaviour
 {
     public virtual float Contentment()
     {
