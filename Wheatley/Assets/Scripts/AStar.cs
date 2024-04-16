@@ -91,7 +91,7 @@ public class AStar : MonoBehaviour
             closed.Add(current);
 
         }
-        Debug.Log("Nodes Expanded: " + closed.Count);
+        //Debug.Log("Nodes Expanded: " + closed.Count);
 
         // Determine whether A* found a path and print it here.
         if (current.node != end.GetComponent<Node>())
@@ -109,7 +109,7 @@ public class AStar : MonoBehaviour
                 current = current.connection;
             }
 
-            Debug.Log("Path Length: " + path.Count);
+            //Debug.Log("Path Length: " + path.Count);
 
             return path;
         }

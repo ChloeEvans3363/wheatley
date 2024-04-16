@@ -40,8 +40,8 @@ public class WorldState
 
     public WorldState(Map map)
     {
-        floorElements = map.floorElements;
-        objectsOnMap = map.objectsOnMap;
+        floorElements = CopyDictionary(map.floorElements);
+        objectsOnMap = CopyDictionary(map.objectsOnMap);
 
         player = MapManager.Instance.player;
 
@@ -277,6 +277,17 @@ public class WorldState
         {
             objectsPositions.Add(key, objectsOnMap[key].transform.position);
         }
+    }
+
+    private Dictionary<Tuple<int, int>, GameObject> CopyDictionary(Dictionary<Tuple<int, int>, GameObject> old)
+    {
+        Dictionary<Tuple<int, int>, GameObject> newDictionary = new Dictionary<Tuple<int, int>, GameObject>();
+        
+        foreach(var key in old.Keys)
+        {
+            newDictionary.Add(key, old[key]);
+        }
+        return newDictionary;
     }
 
     private void GetMoveableBlocks()

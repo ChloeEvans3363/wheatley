@@ -30,6 +30,7 @@ public class RAT : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             WorldState initialState = new WorldState(MapManager.Instance.currentMap);
@@ -38,9 +39,11 @@ public class RAT : MonoBehaviour
 
             if (plan != null)
             {
+                /*
                 Debug.Log("DFS Plan:");
                 foreach (Action action in plan)
                     Debug.Log(action);
+                */
 
                 StartCoroutine(Move(plan));
             }
