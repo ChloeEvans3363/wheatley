@@ -31,7 +31,7 @@ public class RAT : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             WorldState initialState = new WorldState(MapManager.Instance.currentMap);
             Action[] plan = Planner.plan(initialState, 4);
@@ -50,6 +50,7 @@ public class RAT : MonoBehaviour
             else
             {
                 Debug.Log("No plan found");
+                ManageScenes.Instance.DisplaySearchFailed();
             }
         }
     }

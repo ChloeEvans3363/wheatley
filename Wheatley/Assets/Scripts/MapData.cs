@@ -52,6 +52,8 @@ public class MapData : MonoBehaviour
         {
             map2.intendedPath.Add(new Tuple<int, int>(path2[0, i], path2[1, i]));
         }
+        //map2.AddKey(new Tuple<int, int>(1, 1));
+        //map2.AddDoor(new Tuple<int, int>(1, 2));
         mapList.Add(map2);
     }
 }
@@ -64,6 +66,10 @@ public class Map
     public List<Tuple<int, int>> intendedPath { get; set; } = new List<Tuple<int, int>>();
     public Tuple<int, int> playerStart { get; set; }
     public Tuple<int, int> endLocation { get; set; }
+
+    public List<Tuple<int, int>> doors { get; } = new List<Tuple<int, int>>();
+    public List<Tuple<int, int>> keys { get; } = new List<Tuple<int, int>>();
+
     public int numPushBoxes;
     public int numImmoveableBoxes;
 
@@ -74,5 +80,15 @@ public class Map
         this.endLocation = endLocation;
         this.numPushBoxes = numPushBoxes;
         this.numImmoveableBoxes = numImmoveableBoxes;
+    }
+
+    public void AddKey(Tuple<int, int> location)
+    {
+        keys.Add(location);
+    }
+
+    public void AddDoor(Tuple<int, int> location)
+    {
+        doors.Add(location);
     }
 }

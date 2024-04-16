@@ -37,31 +37,26 @@ public class GameManager : MonoBehaviour
             ManageScenes.Instance.ReloadScene();
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Vector3 endPosition = end.transform.position;
+        //if(Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    Vector3 endPosition = end.transform.position;
 
-            // Clears previous connections on map
-            MapManager.Instance.DisconnectTiles();
+        //    // Clears previous connections on map
+        //    MapManager.Instance.DisconnectTiles();
 
-            // Creates the connections on the map
-            MapManager.Instance.GenerateConnections();
+        //    // Creates the connections on the map
+        //    MapManager.Instance.GenerateConnections();
 
-            // Generates the path using A*
-            /*
-            StartCoroutine(HandleInput
-                (TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
-            */
-            path = AStar.Search(TargetTile, MapManager.Instance.CurrentTile((int)endPosition.x, (int)endPosition.z));
-            // Moves the player along the path
-            if (path != null)
-                StartCoroutine(Move());
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-
-        }
+        //    // Generates the path using A*
+        //    /*
+        //    StartCoroutine(HandleInput
+        //        (TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
+        //    */
+        //    path = AStar.Search(TargetTile, MapManager.Instance.CurrentTile((int)endPosition.x, (int)endPosition.z));
+        //    // Moves the player along the path
+        //    if (path != null)
+        //        StartCoroutine(Move());
+        //}
 
         // Move character
         if (playerControl)

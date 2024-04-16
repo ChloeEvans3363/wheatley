@@ -1132,6 +1132,8 @@ MonoBehaviour:
   floor: {fileID: 1313186528508554042, guid: 79d9c40f90f4f484fb1a4e3bbc86f323, type: 3}
   playerPrefab: {fileID: 2238107481006007574, guid: 5b280842ce4d4bc439ae2d1bcdeb5b58, type: 3}
   endPrefab: {fileID: 1984702990544173879, guid: 02229f3a3b6448a48abc583b501b1043, type: 3}
+  key: {fileID: 3821834260156953643, guid: 0f511d4f1f5ff1d4fa08f212b9e19716, type: 3}
+  door: {fileID: 536539069716528623, guid: 0b330a043e207204889d80f328cd4d04, type: 3}
   moveableBlock: {fileID: 5895787365095305930, guid: e76adeb91221d814bb0e51537e9e72f3, type: 3}
   player: {fileID: 0}
   end: {fileID: 0}

@@ -28,6 +28,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] GameObject floor;
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject endPrefab;
+    [SerializeField] GameObject key;
+    [SerializeField] GameObject door;
     [SerializeField] public Tuple<int, int> playerLocation = new Tuple<int, int>(0, 6);
     [SerializeField] GameObject moveableBlock;
     public GameObject player;
@@ -92,10 +94,11 @@ public class MapManager : MonoBehaviour
 
         for (int i = 0; i < map.numPushBoxes; i++)
         {
-            GameObject block = Instantiate(moveableBlock, new Vector3(1.8f, i * 0.02f, -1.8f), Quaternion.identity, this.transform);
+            GameObject block = Instantiate(moveableBlock, new Vector3(-0.3f, i * 0.02f, -1.8f), Quaternion.identity, this.transform);
             block.GetComponent<InteractibleObject>().canPush = true;
             block.GetComponent<InteractibleObject>().UpdateTint();
-            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(1.8f, i * 0.02f, -1.8f);
+            block.GetComponent<InteractibleObject>().type = InteractibleObject.ObjectType.BasicBlock;
+            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(-0.3f, i * 0.02f, -1.8f);
             block.GetComponent<MoveBox>().mapIdentity = i + 1;
         }
 
@@ -103,14 +106,31 @@ public class MapManager : MonoBehaviour
 
         for (int i = map.numPushBoxes; i < map.numImmoveableBoxes + map.numPushBoxes; i++)
         {
-            GameObject block = Instantiate(moveableBlock, new Vector3(4.0f, i * 0.02f, -1.8f), Quaternion.identity, this.transform);
+            GameObject block = Instantiate(moveableBlock, new Vector3(2.0f, i * 0.02f, -1.8f), Quaternion.identity, this.transform);
             block.GetComponent<InteractibleObject>().canPush = false;
             block.GetComponent<InteractibleObject>().UpdateTint();
-            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(4.0f, i*0.02f, -1.8f);
+            block.GetComponent<InteractibleObject>().type = InteractibleObject.ObjectType.BasicBlock;
+            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(2.0f, i*0.02f, -1.8f);
             block.GetComponent<MoveBox>().mapIdentity = i + 1;
         }
 
         ManageScenes.Instance.SetNumImmovableBlocks(map.numImmoveableBoxes);
+
+        for (int i = 0; i < map.doors.Count; i++)
+        {
+            GameObject newDoor = Instantiate(door, new Vector3(map.doors[i].Item1, map.mapHeights[map.doors[i].Item1, map.doors[i].Item2] + 1, map.doors[i].Item2), Quaternion.identity, this.transform);
+            newDoor.GetComponent<InteractibleObject>().canPush = false;
+            newDoor.GetComponent<InteractibleObject>().type = InteractibleObject.ObjectType.Door;
+            currentMap.objectsOnMap.Add(map.doors[i], newDoor);
+        }
+
+        for (int i = 0; i < map.keys.Count; i++)
+        {
+            GameObject newKey = Instantiate(key, new Vector3(map.keys[i].Item1, map.mapHeights[map.keys[i].Item1, map.keys[i].Item2] + 1, map.keys[i].Item2), Quaternion.identity, this.transform);
+            newKey.GetComponent<InteractibleObject>().canPush = false;
+            newKey.GetComponent<InteractibleObject>().type = InteractibleObject.ObjectType.Key;
+            currentMap.objectsOnMap.Add(map.keys[i], newKey);
+        }
     }
 
     public void GenerateConnections()

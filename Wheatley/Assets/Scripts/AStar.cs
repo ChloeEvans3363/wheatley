@@ -97,7 +97,6 @@ public class AStar : MonoBehaviour
         if (current.node != end.GetComponent<Node>())
         {
             Debug.Log("Search Failed");
-            ManageScenes.Instance.DisplaySearchFailed();
         }
         else
         {
@@ -120,7 +119,9 @@ public class AStar : MonoBehaviour
     public static bool CanFindPath(GameObject start, GameObject end)
     {
         if (Search(start, end) == null)
+        {
             return false;
+        }
         return true;
     }
 

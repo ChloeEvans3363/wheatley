@@ -10,6 +10,15 @@ public class InteractibleObject : MonoBehaviour
     public bool canPush = true;
     public string heldWord = "Dogs";
 
+    public enum ObjectType
+    {
+        BasicBlock,
+        Key,
+        Door
+    }
+
+    public ObjectType type = ObjectType.BasicBlock;
+
     private void Start()
     {
         TextMeshPro text = gameObject.GetComponentInChildren<TextMeshPro>();
