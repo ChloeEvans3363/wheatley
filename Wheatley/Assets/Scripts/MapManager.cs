@@ -59,7 +59,7 @@ public class MapManager : MonoBehaviour
         map.floorElements = new Dictionary<Tuple<int, int>, GameObject>();
 
         if (map.mapHeights[0, 0] >= 0)
-            createTile(0, 0, new Tuple<int, int>(0, 0));
+            CreateTile(0, 0, new Tuple<int, int>(0, 0));
         else
             map.floorElements.Add(new Tuple<int, int>(0, 0), null);
 
@@ -72,7 +72,7 @@ public class MapManager : MonoBehaviour
                     map.floorElements.Add(new Tuple<int, int>(i, j), null);
                     continue;
                 }
-                GameObject newTile = createTile(i, j, new Tuple<int, int>(i, j));
+                GameObject newTile = CreateTile(i, j, new Tuple<int, int>(i, j));
 
                 if (i == playerLocation.Item1 && j == playerLocation.Item2)
                 {
@@ -134,7 +134,7 @@ public class MapManager : MonoBehaviour
                         if (currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)) 
                             && player.transform.position.y - 1 == currentMap.objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
                         {
-                            connectTiles(currentMap.floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.objectsOnMap[new Tuple<int, int>(i, j)]);
+                            ConnectTiles(currentMap.floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
                         // Otherwise if there isn't an object in the way
                         else if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
@@ -143,13 +143,13 @@ public class MapManager : MonoBehaviour
                             // If so connect the ground node to that object
                             if(player.transform.position.y - 1 != currentMap.floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y && currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
                             {
-                                connectTiles(currentMap.objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.floorElements[new Tuple<int, int>(i, j)]);
+                                ConnectTiles(currentMap.objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.floorElements[new Tuple<int, int>(i, j)]);
                             }
                             // Otherwise if the current ground piece is floor level
                             // Connect the ground piece to another ground piece
                             else if(player.transform.position.y - 1 == currentMap.floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
                             {
-                                connectTiles(currentMap.floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.floorElements[new Tuple<int, int>(i, j)]);
+                                ConnectTiles(currentMap.floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.floorElements[new Tuple<int, int>(i, j)]);
                             }
                         }
                     }
@@ -164,7 +164,7 @@ public class MapManager : MonoBehaviour
                         if (currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
                             && player.transform.position.y - 1 == currentMap.objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
                         {
-                            connectTiles(currentMap.floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.objectsOnMap[new Tuple<int, int>(i, j)]);
+                            ConnectTiles(currentMap.floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
                         // Otherwise if there isn't an object in the way
                         else if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
@@ -173,13 +173,13 @@ public class MapManager : MonoBehaviour
                             // If so connect the ground node to that object
                             if (player.transform.position.y - 1 != currentMap.floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y && currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
                             {
-                                connectTiles(currentMap.objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.floorElements[new Tuple<int, int>(i, j)]);
+                                ConnectTiles(currentMap.objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.floorElements[new Tuple<int, int>(i, j)]);
                             }
                             // Otherwise if the current ground piece is floor level
                             // Connect the ground piece to another ground piece
                             else if (player.transform.position.y - 1 == currentMap.floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
                             {
-                                connectTiles(currentMap.floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.floorElements[new Tuple<int, int>(i, j)]);
+                                ConnectTiles(currentMap.floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.floorElements[new Tuple<int, int>(i, j)]);
                             }
                         }
                     }
@@ -187,7 +187,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    private GameObject createTile(int x, int y, Tuple<int, int> pos)
+    private GameObject CreateTile(int x, int y, Tuple<int, int> pos)
     {
         if (!currentMap.floorElements.ContainsKey(pos))
         {
@@ -394,7 +394,7 @@ public class MapManager : MonoBehaviour
         player = newPlayer;
     }
 
-    private void connectTiles(GameObject from, DirectionEnum direction, GameObject to)
+    private void ConnectTiles(GameObject from, DirectionEnum direction, GameObject to)
     {
         // Grab the node scripts attached to the two tile game objects.
         Node fromNode = from.GetComponent<Node>();
@@ -447,7 +447,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public GameObject currentTile(int x, int z)
+    public GameObject CurrentTile(int x, int z)
     {
         return currentMap.floorElements[new Tuple<int, int>(x, z)];
     }

@@ -7,20 +7,13 @@ using UnityEngine.UIElements;
 public class A_MoveBlock : Action
 {
 
-    // Change this later
-    List<System.Type> SupportedGoals = new List<System.Type>() { typeof(G_MoveBlock) };
-    public override List<System.Type> GetSupportedGoals()
-    {
-        return SupportedGoals;
-    }
-
     public override bool PreconditionsMet(WorldState state)
     {
         Map map = MapManager.Instance.currentMap;
 
         if (state.pits.Count > 0 && state.moveableBlocks.Count > 0)
         {
-            Vector2 playerPositon = new Vector2(state.playerTile.transform.position.x, state.playerTile.transform.position.z);
+            Vector2 playerPositon = new Vector2(state.playerTilePos.x, state.playerTilePos.z);
 
             foreach(var bKey in state.moveableBlocks.Keys)
             {
@@ -45,7 +38,7 @@ public class A_MoveBlock : Action
 
         if (state.pits.Count > 0 && state.moveableBlocks.Count > 0)
         {
-            Vector2 playerPositon = new Vector2(state.playerTile.transform.position.x, state.playerTile.transform.position.z);
+            Vector2 playerPositon = new Vector2(state.playerTilePos.x, state.playerTilePos.z);
 
             foreach (var bKey in state.moveableBlocks.Keys)
             {
@@ -73,7 +66,7 @@ public class A_MoveBlock : Action
 
         if (successorState.pits.Count > 0 && successorState.moveableBlocks.Count > 0)
         {
-            Vector2 playerPositon = new Vector2(state.playerTile.transform.position.x, state.playerTile.transform.position.z);
+            Vector2 playerPositon = new Vector2(state.playerTilePos.x, state.playerTilePos.z);
 
             foreach (var bKey in successorState.moveableBlocks.Keys)
             {

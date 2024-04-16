@@ -5,16 +5,10 @@ using UnityEngine;
 
 public class A_GoToWin : Action
 {
-    // Change this later
-    List<System.Type> SupportedGoals = new List<System.Type>() { typeof(G_Win)};
-    public override List<System.Type> GetSupportedGoals()
-    {
-        return SupportedGoals;
-    }
     public override bool PreconditionsMet(WorldState state)
     {
-        GameObject end = state.endTile;
-        GameObject start = state.playerTile;
+        GameObject end = state.CurrentTile((int)state.endTilePos.x, (int)state.endTilePos.z);
+        GameObject start = state.CurrentTile((int)state.playerTilePos.x, (int)state.playerTilePos.z);
 
         state.DisconnectTiles();
         state.GenerateConnections();
@@ -23,8 +17,8 @@ public class A_GoToWin : Action
 
     public override float GetCost(WorldState state)
     {
-        GameObject end = state.endTile;
-        GameObject start = state.playerTile;
+        GameObject end = state.CurrentTile((int)state.endTilePos.x, (int)state.endTilePos.z);
+        GameObject start = state.CurrentTile((int)state.playerTilePos.x, (int)state.playerTilePos.z);
 
         state.DisconnectTiles();
         state.GenerateConnections();
@@ -36,7 +30,7 @@ public class A_GoToWin : Action
         WorldState successorState = state.Clone();
 
         // Sets the player to be at the end
-        successorState.playerTile.transform.position = successorState.playerTile.transform.position;
+        successorState.playerTilePos = successorState.endTilePos;
 
         return successorState;
     }

@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         end = MapManager.Instance.end;
 
         Vector3 playerPositon = player.transform.position;
-        TargetTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
+        TargetTile = MapManager.Instance.CurrentTile((int)playerPositon.x, (int)playerPositon.z);
     }
 
     // Update is called once per frame
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(HandleInput
                 (TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z)));
             */
-            path = AStar.Search(TargetTile, MapManager.Instance.currentTile((int)endPosition.x, (int)endPosition.z));
+            path = AStar.Search(TargetTile, MapManager.Instance.CurrentTile((int)endPosition.x, (int)endPosition.z));
             // Moves the player along the path
             if (path != null)
                 StartCoroutine(Move());
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
                 MapManager.Instance.MovePlayer(MapManager.DirectionEnum.Left);
 
             Vector3 playerPositon = player.transform.position;
-            TargetTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
+            TargetTile = MapManager.Instance.CurrentTile((int)playerPositon.x, (int)playerPositon.z);
         }
 
     }
