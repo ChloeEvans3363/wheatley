@@ -84,11 +84,16 @@ public class A_MoveBlock : Action
 
                     if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
                     {
+
+                        GameObject box = successorState.objectsOnMap[bKey];
+                        box.transform.position = 
+                            new Vector3(successorState.pits[pKey].transform.position.x,
+                            1, successorState.pits[pKey].transform.position.z);
+
+                        successorState.objectsOnMap.Add(pKey, box);
+                        successorState.objectsOnMap.Remove(bKey);
                         successorState.moveableBlocks.Remove(bKey);
                         successorState.pits.Remove(pKey);
-
-                        successorState.objectsOnMap.Add(pKey, successorState.objectsOnMap[bKey]);
-                        successorState.objectsOnMap.Remove(bKey);
                     }
                 }
             }

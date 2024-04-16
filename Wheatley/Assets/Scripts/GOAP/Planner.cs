@@ -57,14 +57,12 @@ public class Planner
 
                 float currentContentment = states[currentDepth].GetContentment();
 
-                /*
                 Debug.Log("Reached Leaf Node with Utility: " + currentContentment);
                 Debug.Log("Best Utility: " + bestContentment);
                 Debug.Log("Current Plan:");
                 foreach (Action action in actions)
                     Debug.Log(action);
                 Debug.Log(states[currentDepth]);
-                */
 
                 if (currentContentment > bestContentment)
                 {
@@ -72,12 +70,10 @@ public class Planner
 
                     actions.CopyTo(currentPlan, 0);
 
-                    /*
                     Debug.Log("Updated Plan:");
                     foreach (Action action in currentPlan)
                         Debug.Log(action);
                     Debug.Log("");
-                    */
                 }
                 currentDepth -= 1;
             }

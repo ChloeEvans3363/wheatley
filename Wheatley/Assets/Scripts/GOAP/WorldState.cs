@@ -27,7 +27,6 @@ public class WorldState
     public Dictionary<Tuple<int, int>, GameObject> moveableBlocks =
         new Dictionary<Tuple<int, int>, GameObject>();
 
-    public GameObject player;
     public GameObject playerTile;
     public GameObject endTile;
 
@@ -35,8 +34,6 @@ public class WorldState
     {
         floorElements = map.floorElements;
         objectsOnMap = map.objectsOnMap;
-
-        player = MapManager.Instance.player;
 
         playerTile = floorElements[map.playerStart];
         endTile = floorElements[map.endLocation];
@@ -47,16 +44,15 @@ public class WorldState
         GetMoveableBlocks();
         GetPits();
 
-        Goals.Add(new G_Win());
         Goals.Add(new G_MoveBlock());
+        Goals.Add(new G_Win());
 
-        Actions.Add(new A_GoToWin());
         Actions.Add(new A_MoveBlock());
+        Actions.Add(new A_GoToWin());
     }
 
     public WorldState(WorldState state)
     {
-        player = state.player;
         playerTile = state.playerTile;
         floorElements = state.floorElements;
         objectsOnMap = state.objectsOnMap;
@@ -150,7 +146,7 @@ public class WorldState
                         // Checks if there is an object in the same place and if that object is ground level
                         // If so connect the ground to the object
                         if (objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
-                            && player.transform.position.y - 1 == objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
+                            && 1 == objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
                         {
                             connectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
@@ -159,13 +155,13 @@ public class WorldState
                         {
                             // Check if the piece above us has an object on ground level
                             // If so connect the ground node to that object
-                            if (player.transform.position.y - 1 != floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y && objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
+                            if (1 != floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y && objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
                             {
                                 connectTiles(objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, floorElements[new Tuple<int, int>(i, j)]);
                             }
                             // Otherwise if the current ground piece is floor level
                             // Connect the ground piece to another ground piece
-                            else if (player.transform.position.y - 1 == floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
+                            else if (1 == floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
                             {
                                 connectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, floorElements[new Tuple<int, int>(i, j)]);
                             }
@@ -180,7 +176,7 @@ public class WorldState
                         // Checks if there is an object in the same place and if that object is ground level
                         // If so connect the ground to the object
                         if (objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
-                            && player.transform.position.y - 1 == objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
+                            && 1 == objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
                         {
                             connectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
@@ -189,13 +185,13 @@ public class WorldState
                         {
                             // Check if the piece to the left has an object on ground level
                             // If so connect the ground node to that object
-                            if (player.transform.position.y - 1 != floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y && objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
+                            if (1 != floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y && objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
                             {
                                 connectTiles(objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, floorElements[new Tuple<int, int>(i, j)]);
                             }
                             // Otherwise if the current ground piece is floor level
                             // Connect the ground piece to another ground piece
-                            else if (player.transform.position.y - 1 == floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
+                            else if (1 - 1 == floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
                             {
                                 connectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, floorElements[new Tuple<int, int>(i, j)]);
                             }
