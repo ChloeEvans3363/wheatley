@@ -29,7 +29,7 @@ public class AStar : MonoBehaviour
 
         while(open.Count > 0)
         {
-            current = smallestElement(open, start, end);
+            current = SmallestElement(open, start, end);
 
             if (current.node == end.GetComponent<Node>())
                 break;
@@ -129,7 +129,7 @@ public class AStar : MonoBehaviour
         return Search(start, end).Count;
     }
 
-    private static NodeRecord smallestElement(List<NodeRecord> nodes, GameObject start, GameObject end)
+    private static NodeRecord SmallestElement(List<NodeRecord> nodes, GameObject start, GameObject end)
     {
         NodeRecord smallest = nodes[0];
 
