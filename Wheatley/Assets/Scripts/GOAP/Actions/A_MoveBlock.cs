@@ -7,6 +7,8 @@ using static MapManager;
 
 public class A_MoveBlock : Action
 {
+    public GameObject aPit;
+    public GameObject aBlock;
 
     public override bool PreconditionsMet(WorldState state)
     {
@@ -18,14 +20,18 @@ public class A_MoveBlock : Action
 
             foreach(var bKey in state.moveableBlocks.Keys)
             {
-                foreach(GameObject pit in state.pits.Values)
+                foreach(var pKey in state.pits.Keys)
                 {
-                    Vector2 endPos = new Vector2(pit.transform.position.x, pit.transform.position.z);
-                    Vector2 cratePos = new Vector2(state.objectsPositions[bKey].x, state.objectsPositions[bKey].z);
-
-                    if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
+                    if (!(state.moveableBlocks.ContainsKey(pKey)
+                       && state.pits.ContainsKey(bKey)))
                     {
-                        return true;
+                        Vector2 endPos = new Vector2(state.floorElements[pKey].transform.position.x, state.floorElements[pKey].transform.position.z);
+                        Vector2 cratePos = new Vector2(state.objectsPositions[bKey].x, state.objectsPositions[bKey].z);
+
+                        if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -88,6 +94,9 @@ public class A_MoveBlock : Action
                             Vector2 newPos = PushBoxSearch.PosAfterMoves(moves, playerPositon);
                             state.playerTilePos = newPos;
 
+                            aPit = successorState.floorElements[pKey];
+                            aBlock = successorState.objectsOnMap[bKey];
+
                             successorState.objectsOnMap.Add(pKey, successorState.objectsOnMap[bKey]);
                             successorState.objectsPositions.Add(pKey,
                                 new Vector3(successorState.pits[pKey].transform.position.x,
@@ -106,5 +115,16 @@ public class A_MoveBlock : Action
         }
 
         return successorState;
+    }
+
+    public override Stack<MapManager.DirectionEnum> GetDirections(GameObject start, GameObject end)
+    {
+        Vector2 playerPos = new Vector2(start.transform.position.x, start.transform.position.z);
+        Vector2 cratePos = new Vector2(aBlock.transform.position.x, aBlock.transform.position.z);
+        Vector2 pitPos = new Vector2(aPit.transform.position.x, aPit.transform.position.z);
+        Map map = MapManager.Instance.currentMap;
+
+        return PushBoxSearch.PushBoxPathSearch(map.mapHeights, playerPos,
+            cratePos, pitPos);
     }
 }

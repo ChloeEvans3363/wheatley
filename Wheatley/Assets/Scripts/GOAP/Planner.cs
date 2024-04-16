@@ -87,7 +87,7 @@ public class Planner
         // the end was reached
         if(bestContentment > 0)
         {
-            Debug.Log("cost: " + bestCost);
+            //Debug.Log("cost: " + bestCost);
             return currentPlan;
         }
         return null;

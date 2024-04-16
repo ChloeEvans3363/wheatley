@@ -34,4 +34,11 @@ public class A_GoToWin : Action
 
         return successorState;
     }
+
+    public override Stack<MapManager.DirectionEnum> GetDirections(GameObject start, GameObject end)
+    {
+        MapManager.Instance.DisconnectTiles();
+        MapManager.Instance.GenerateConnections();
+        return AStar.Search(start, end);
+    }
 }
