@@ -79,25 +79,28 @@ public class A_MoveBlock : Action
             {
                 foreach (var pKey in successorState.pits.Keys)
                 {
-                    Vector2 endPos = new Vector2(successorState.pits[pKey].transform.position.x,
-                        successorState.pits[pKey].transform.position.z);
-                    Vector2 cratePos = new Vector2(successorState.moveableBlocks[bKey].transform.position.x,
-                        successorState.moveableBlocks[bKey].transform.position.z);
-
-                    if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
+                    if(!(successorState.moveableBlocks.ContainsKey(pKey) 
+                        && successorState.pits.ContainsKey(bKey)))
                     {
+                        Vector2 endPos = new Vector2(successorState.pits[pKey].transform.position.x,
+                            successorState.pits[pKey].transform.position.z);
+                        Vector2 cratePos = new Vector2(successorState.moveableBlocks[bKey].transform.position.x,
+                            successorState.moveableBlocks[bKey].transform.position.z);
 
-                        GameObject box = successorState.objectsOnMap[bKey];
-                        box.transform.position = 
-                            new Vector3(successorState.pits[pKey].transform.position.x,
-                            1, successorState.pits[pKey].transform.position.z);
+                        if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
+                        {
+                            successorState.objectsOnMap.Add(pKey, successorState.objectsOnMap[bKey]);
+                            successorState.objectsPositions.Add(pKey,
+                                new Vector3(successorState.pits[pKey].transform.position.x,
+                                1, successorState.pits[pKey].transform.position.z));
 
-                        successorState.objectsOnMap.Add(pKey, box);
-                        successorState.objectsOnMap.Remove(bKey);
-                        successorState.moveableBlocks.Remove(bKey);
-                        successorState.pits.Remove(pKey);
+                            successorState.objectsOnMap.Remove(bKey);
+                            successorState.objectsPositions.Remove(bKey);
+                            successorState.moveableBlocks.Remove(bKey);
+                            successorState.pits.Remove(pKey);
 
-                        return successorState;
+                            return successorState;
+                        }
                     }
                 }
             }

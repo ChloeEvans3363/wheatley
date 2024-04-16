@@ -21,6 +21,9 @@ public class WorldState
     public Dictionary<Tuple<int, int>, GameObject> objectsOnMap =
         new Dictionary<Tuple<int, int>, GameObject>();
 
+    public Dictionary<Tuple<int, int>, Vector3> objectsPositions =
+    new Dictionary<Tuple<int, int>, Vector3>();
+
     public Dictionary<Tuple<int, int>, GameObject> pits =
         new Dictionary<Tuple<int, int>, GameObject>();
 
@@ -44,6 +47,7 @@ public class WorldState
         Goals = new List<Goal>();
         Actions = new List<Action>();
 
+        GetPositions();
         GetMoveableBlocks();
         GetPits();
 
@@ -61,6 +65,8 @@ public class WorldState
         floorElements = state.floorElements;
         objectsOnMap = state.objectsOnMap;
         endTile = state.endTile;
+
+        objectsPositions = state.objectsPositions;
 
         moveableBlocks = state.moveableBlocks;
         pits = state.pits;
@@ -150,7 +156,7 @@ public class WorldState
                         // Checks if there is an object in the same place and if that object is ground level
                         // If so connect the ground to the object
                         if (objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
-                            && player.transform.position.y - 1 == objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
+                            && player.transform.position.y - 1 == objectsPositions[new Tuple<int, int>(i, j)].y)
                         {
                             connectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
@@ -180,7 +186,7 @@ public class WorldState
                         // Checks if there is an object in the same place and if that object is ground level
                         // If so connect the ground to the object
                         if (objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
-                            && player.transform.position.y - 1 == objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
+                            && player.transform.position.y - 1 == objectsPositions[new Tuple<int, int>(i, j)].y)
                         {
                             connectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
@@ -239,7 +245,15 @@ public class WorldState
         return false;
     }
 
-    public void GetMoveableBlocks()
+    private void GetPositions()
+    {
+        foreach(var key in objectsOnMap.Keys)
+        {
+            objectsPositions.Add(key, objectsOnMap[key].transform.position);
+        }
+    }
+
+    private void GetMoveableBlocks()
     {
 
         foreach (var key in objectsOnMap.Keys)
@@ -249,7 +263,7 @@ public class WorldState
         }
     }
 
-    public void GetPits()
+    private void GetPits()
     {
 
         foreach (var key in floorElements.Keys)
@@ -261,12 +275,12 @@ public class WorldState
         }
     }
 
-    public Dictionary<Tuple<int, int>, GameObject> GetDoors()
+    private Dictionary<Tuple<int, int>, GameObject> GetDoors()
     {
         return null;
     }
 
-    public Dictionary<Tuple<int, int>, GameObject> GetKeys()
+    private Dictionary<Tuple<int, int>, GameObject> GetKeys()
     {
         return null;
     }
