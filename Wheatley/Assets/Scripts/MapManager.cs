@@ -235,6 +235,11 @@ public class MapManager : MonoBehaviour
                 //If next tile has block, try to push
                 if (currentMap.objectsOnMap.ContainsKey(pos))
                 {
+                    if(!currentMap.objectsOnMap[pos].GetComponent<InteractibleObject>().canPush)
+                    {
+                        return -1;
+                    }
+
                     Tuple<int, int> newPos = pos;
                     Vector3 newPosition = new Vector3();
 
@@ -280,6 +285,10 @@ public class MapManager : MonoBehaviour
                 //If next tile has block, try to push
                 if (currentMap.objectsOnMap.ContainsKey(pos))
                 {
+                    if (!currentMap.objectsOnMap[pos].GetComponent<InteractibleObject>().canPush)
+                    {
+                        return -1;
+                    }
                     Tuple<int, int> newPos = pos;
                     Vector3 newPosition = new Vector3();
 
