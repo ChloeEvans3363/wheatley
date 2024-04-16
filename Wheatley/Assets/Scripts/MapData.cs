@@ -52,8 +52,8 @@ public class MapData : MonoBehaviour
         {
             map2.intendedPath.Add(new Tuple<int, int>(path2[0, i], path2[1, i]));
         }
-        //map2.AddKey(new Tuple<int, int>(1, 1));
-        //map2.AddDoor(new Tuple<int, int>(1, 2));
+        map2.AddKey(new Tuple<int, int>(2, 5));
+        map2.AddDoor(new Tuple<int, int>(2, 2));
         mapList.Add(map2);
     }
 }

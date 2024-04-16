@@ -127,7 +127,7 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < map.keys.Count; i++)
         {
             GameObject newKey = Instantiate(key, new Vector3(map.keys[i].Item1, map.mapHeights[map.keys[i].Item1, map.keys[i].Item2] + 1, map.keys[i].Item2), Quaternion.identity, this.transform);
-            newKey.GetComponent<InteractibleObject>().canPush = false;
+            newKey.GetComponent<InteractibleObject>().canPush = true;
             newKey.GetComponent<InteractibleObject>().type = InteractibleObject.ObjectType.Key;
             currentMap.objectsOnMap.Add(map.keys[i], newKey);
         }
@@ -235,6 +235,17 @@ public class MapManager : MonoBehaviour
                 //If next tile has block, try to push
                 if (currentMap.objectsOnMap.ContainsKey(pos))
                 {
+                    if (currentMap.objectsOnMap.ContainsKey(priorPos) 
+                        && currentMap.objectsOnMap[priorPos].GetComponent<InteractibleObject>().type == InteractibleObject.ObjectType.Key 
+                        && currentMap.objectsOnMap[pos].GetComponent<InteractibleObject>().type == InteractibleObject.ObjectType.Door)
+                    {
+                        currentMap.objectsOnMap[pos].gameObject.SetActive(false);
+                        currentMap.objectsOnMap[priorPos].gameObject.SetActive(false);
+                        currentMap.objectsOnMap.Remove(pos);
+                        currentMap.objectsOnMap.Remove(priorPos);
+                        return -1;
+                    }
+
                     if(!currentMap.objectsOnMap[pos].GetComponent<InteractibleObject>().canPush)
                     {
                         return -1;
@@ -277,6 +288,8 @@ public class MapManager : MonoBehaviour
             else if ((priorPos == playerLocation && currentMap.objectsOnMap.ContainsKey(pos) || (priorPos != playerLocation && !currentMap.objectsOnMap.ContainsKey(pos)))
                 && currentMap.mapHeights[priorPos.Item1, priorPos.Item2] - 1 == currentMap.mapHeights[pos.Item1, pos.Item2])
             {
+                if (currentMap.objectsOnMap.ContainsKey(pos) && currentMap.objectsOnMap[pos].GetComponent<InteractibleObject>().type != InteractibleObject.ObjectType.BasicBlock)
+                    return -1;
                 return 2;
             }
             //Exiting Hole
