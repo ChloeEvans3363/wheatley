@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static MapManager;
 
 public class A_MoveBlock : Action
 {
@@ -83,6 +84,10 @@ public class A_MoveBlock : Action
 
                         if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
                         {
+                            Stack<DirectionEnum> moves = PushBoxSearch.PushBoxPathSearch(map.mapHeights, playerPositon, cratePos, endPos);
+                            Vector2 newPos = PushBoxSearch.PosAfterMoves(moves, playerPositon);
+                            state.playerTilePos = newPos;
+
                             successorState.objectsOnMap.Add(pKey, successorState.objectsOnMap[bKey]);
                             successorState.objectsPositions.Add(pKey,
                                 new Vector3(successorState.pits[pKey].transform.position.x,
