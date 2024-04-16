@@ -18,10 +18,18 @@ public class RAT : MonoBehaviour
         {
             WorldState initialState = new WorldState(MapManager.Instance.currentMap);
             Action[] plan = Planner.plan(initialState, 4);
-            Debug.Log("DFS Plan:");
-            foreach (Action action in plan)
-                Debug.Log(action);
-            Debug.Log("");
+
+            if(plan != null)
+            {
+                Debug.Log("DFS Plan:");
+                foreach (Action action in plan)
+                    Debug.Log(action);
+                Debug.Log("");
+            }
+            else
+            {
+                Debug.Log("No plan found");
+            }
         }
     }
 }

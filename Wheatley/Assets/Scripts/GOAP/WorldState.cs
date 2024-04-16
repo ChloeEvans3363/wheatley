@@ -85,6 +85,18 @@ public class WorldState
         return contentment;
     }
 
+    public float GetTotalCost(Action[] actions)
+    {
+        float cost = 0;
+
+        foreach(Action action in actions)
+        {
+            cost += action.GetCost(this);
+        }
+
+        return cost;
+    }
+
     public Action NextAction()
     {
         if (SatisfiedActions == null)
