@@ -15,6 +15,9 @@ public class A_GoToWin : Action
     {
         GameObject end = state.endTile;
         GameObject start = state.playerTile;
+
+        state.DisconnectTiles();
+        state.GenerateConnections();
         return AStar.CanFindPath(start, end);
     }
 
@@ -22,6 +25,9 @@ public class A_GoToWin : Action
     {
         GameObject end = state.endTile;
         GameObject start = state.playerTile;
+
+        state.DisconnectTiles();
+        state.GenerateConnections();
         return AStar.GetCost(start, end);
     }
 

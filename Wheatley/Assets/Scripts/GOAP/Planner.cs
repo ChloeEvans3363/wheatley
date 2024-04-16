@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Planner
@@ -33,7 +35,7 @@ public class Planner
     public static Action[] plan(WorldState state, int maxDepth)
     {
         WorldState[] states = new WorldState[maxDepth + 1];
-        List<Action> actions = new List<Action>();
+        Action[] actions = new Action[maxDepth];
 
         Action[] currentPlan = new Action[maxDepth];
         states[0] = state;
@@ -52,11 +54,26 @@ public class Planner
             // to the current plan list
             if(currentDepth >= maxDepth)
             {
+
                 float currentContentment = states[currentDepth].GetContentment();
 
-                if(currentContentment > bestContentment)
+                Debug.Log("Reached Leaf Node with Utility: " + currentContentment);
+                Debug.Log("Best Utility: " + bestContentment);
+                Debug.Log("Current Plan:");
+                foreach (Action action in actions)
+                    Debug.Log(action);
+                Debug.Log(states[currentDepth]);
+
+                if (currentContentment > bestContentment)
                 {
+                    bestContentment = currentContentment;
+
                     actions.CopyTo(currentPlan, 0);
+
+                    Debug.Log("Updated Plan:");
+                    foreach (Action action in currentPlan)
+                        Debug.Log(action);
+                    Debug.Log("");
                 }
                 currentDepth -= 1;
             }
@@ -71,11 +88,17 @@ public class Planner
                     states[currentDepth + 1] = nextAction.OnActivated(states[currentDepth]);
                     actions[currentDepth] = nextAction;
                     currentDepth += 1;
+                    Debug.Log("action " + nextAction);
                 }
                 else
+                {
                     currentDepth -= 1;
+                    Debug.Log("no action");
+                }
+                Debug.Log("Current depth: " + currentDepth);
             }
         }
+        Debug.Log("search end");
 
         return currentPlan;
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MapManager;
 
 public class WorldState
 {
@@ -26,12 +27,13 @@ public class WorldState
     public Dictionary<Tuple<int, int>, GameObject> moveableBlocks =
         new Dictionary<Tuple<int, int>, GameObject>();
 
+    public GameObject player;
     public GameObject playerTile;
-
     public GameObject endTile;
 
     public WorldState(Map map)
     {
+        player = MapManager.Instance.player;
         Vector3 playerPositon = MapManager.Instance.player.transform.position;
         playerTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
         endTile = MapManager.Instance.end;
@@ -99,6 +101,134 @@ public class WorldState
     {
         WorldState stateClone = new WorldState(this);
         return stateClone;
+    }
+
+    public void DisconnectTiles()
+    {
+        // Loops through all the blocks in a level
+        for (int i = 0; i < MapManager.Instance.currentMap.mapHeights.GetLength(0); i++)
+        {
+            for (int j = 0; j < MapManager.Instance.currentMap.mapHeights.GetLength(1); j++)
+            {
+                // Check floor block connections
+                if (floorElements.ContainsKey(new Tuple<int, int>(i, j)) &&
+                    floorElements[new Tuple<int, int>(i, j)] != null)
+                {
+                    // Clears connections for the ground blocks
+                    floorElements[new Tuple<int, int>(i, j)].GetComponent<Node>().Connections.Clear();
+                }
+
+                // Checks object block connections
+                if (objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)) &&
+                    objectsOnMap[new Tuple<int, int>(i, j)] != null)
+                {
+                    // Clears connections for the object blocks
+                    objectsOnMap[new Tuple<int, int>(i, j)].GetComponent<Node>().Connections.Clear();
+                }
+            }
+        }
+    }
+
+    // Needed for AStar
+    public void GenerateConnections()
+    {
+
+        for (int i = 0; i < MapManager.Instance.currentMap.mapHeights.GetLength(0); i++)
+        {
+            for (int j = 0; j < MapManager.Instance.currentMap.mapHeights.GetLength(1); j++)
+            {
+                if (MapManager.Instance.currentMap.mapHeights[i, j] < 0)
+                {
+                    continue;
+                }
+
+                if (i > 0)
+                    // and the tile above us is not an empty obstacle...
+                    if (floorElements[new Tuple<int, int>(i - 1, j)] != null)
+                    {
+                        // Checks if there is an object in the same place and if that object is ground level
+                        // If so connect the ground to the object
+                        if (objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
+                            && player.transform.position.y - 1 == objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
+                        {
+                            connectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, objectsOnMap[new Tuple<int, int>(i, j)]);
+                        }
+                        // Otherwise if there isn't an object in the way
+                        else if (!objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        {
+                            // Check if the piece above us has an object on ground level
+                            // If so connect the ground node to that object
+                            if (player.transform.position.y - 1 != floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y && objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
+                            {
+                                connectTiles(objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, floorElements[new Tuple<int, int>(i, j)]);
+                            }
+                            // Otherwise if the current ground piece is floor level
+                            // Connect the ground piece to another ground piece
+                            else if (player.transform.position.y - 1 == floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
+                            {
+                                connectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, floorElements[new Tuple<int, int>(i, j)]);
+                            }
+                        }
+                    }
+
+                // Similarly, if there is at least one column to the left...
+                if (j > 0)
+                    // and the tile to the left is not an empty obstacle...
+                    if (floorElements[new Tuple<int, int>(i, j - 1)] != null)
+                    {
+                        // Checks if there is an object in the same place and if that object is ground level
+                        // If so connect the ground to the object
+                        if (objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
+                            && player.transform.position.y - 1 == objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
+                        {
+                            connectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, objectsOnMap[new Tuple<int, int>(i, j)]);
+                        }
+                        // Otherwise if there isn't an object in the way
+                        else if (!objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        {
+                            // Check if the piece to the left has an object on ground level
+                            // If so connect the ground node to that object
+                            if (player.transform.position.y - 1 != floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y && objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
+                            {
+                                connectTiles(objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, floorElements[new Tuple<int, int>(i, j)]);
+                            }
+                            // Otherwise if the current ground piece is floor level
+                            // Connect the ground piece to another ground piece
+                            else if (player.transform.position.y - 1 == floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
+                            {
+                                connectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, floorElements[new Tuple<int, int>(i, j)]);
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    private void connectTiles(GameObject from, DirectionEnum direction, GameObject to)
+    {
+        // Grab the node scripts attached to the two tile game objects.
+        Node fromNode = from.GetComponent<Node>();
+        Node toNode = to.GetComponent<Node>();
+
+        // The first direction is simple, add it to the from node.
+        fromNode.Connections.Add(direction, to);
+
+        if (direction == DirectionEnum.Up)
+        {
+            toNode.Connections.Add(DirectionEnum.Down, from);
+        }
+        else if (direction == DirectionEnum.Down)
+        {
+            toNode.Connections.Add(DirectionEnum.Up, from);
+        }
+        else if (direction == DirectionEnum.Left)
+        {
+            toNode.Connections.Add(DirectionEnum.Right, from);
+        }
+        else if (direction == DirectionEnum.Right)
+        {
+            toNode.Connections.Add(DirectionEnum.Left, from);
+        }
     }
 
     public bool GoalAchieved()
