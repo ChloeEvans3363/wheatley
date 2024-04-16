@@ -15,9 +15,12 @@ public class A_GoToWin : Action
     {
         GameObject end = state.endTile;
         GameObject start = state.playerTile;
+        Debug.Log("start: " + start.transform.position);
+        Debug.Log("end " + end.transform.position);
 
         state.DisconnectTiles();
         state.GenerateConnections();
+        Debug.Log("path found: " + AStar.CanFindPath(start, end));
         return AStar.CanFindPath(start, end);
     }
 

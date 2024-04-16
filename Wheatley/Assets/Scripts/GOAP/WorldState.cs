@@ -33,13 +33,13 @@ public class WorldState
 
     public WorldState(Map map)
     {
-        player = MapManager.Instance.player;
-        Vector3 playerPositon = MapManager.Instance.player.transform.position;
-        playerTile = MapManager.Instance.currentTile((int)playerPositon.x, (int)playerPositon.z);
-        endTile = MapManager.Instance.end;
-
         floorElements = map.floorElements;
         objectsOnMap = map.objectsOnMap;
+
+        player = MapManager.Instance.player;
+
+        playerTile = floorElements[map.playerStart];
+        endTile = floorElements[map.endLocation];
 
         Goals = new List<Goal>();
         Actions = new List<Action>();
@@ -56,6 +56,7 @@ public class WorldState
 
     public WorldState(WorldState state)
     {
+        player = state.player;
         playerTile = state.playerTile;
         floorElements = state.floorElements;
         objectsOnMap = state.objectsOnMap;

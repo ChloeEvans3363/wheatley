@@ -84,8 +84,11 @@ public class A_MoveBlock : Action
 
                     if (PushBoxSearch.CanPushBox(map.mapHeights, playerPositon, cratePos, endPos))
                     {
-                        successorState.moveableBlocks[bKey].transform.position =
-                            successorState.pits[pKey].transform.position;
+                        successorState.moveableBlocks.Remove(bKey);
+                        successorState.pits.Remove(pKey);
+
+                        successorState.objectsOnMap.Add(pKey, successorState.objectsOnMap[bKey]);
+                        successorState.objectsOnMap.Remove(bKey);
                     }
                 }
             }

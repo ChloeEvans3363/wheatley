@@ -57,12 +57,14 @@ public class Planner
 
                 float currentContentment = states[currentDepth].GetContentment();
 
+                /*
                 Debug.Log("Reached Leaf Node with Utility: " + currentContentment);
                 Debug.Log("Best Utility: " + bestContentment);
                 Debug.Log("Current Plan:");
                 foreach (Action action in actions)
                     Debug.Log(action);
                 Debug.Log(states[currentDepth]);
+                */
 
                 if (currentContentment > bestContentment)
                 {
@@ -70,10 +72,12 @@ public class Planner
 
                     actions.CopyTo(currentPlan, 0);
 
+                    /*
                     Debug.Log("Updated Plan:");
                     foreach (Action action in currentPlan)
                         Debug.Log(action);
                     Debug.Log("");
+                    */
                 }
                 currentDepth -= 1;
             }
@@ -88,14 +92,14 @@ public class Planner
                     states[currentDepth + 1] = nextAction.OnActivated(states[currentDepth]);
                     actions[currentDepth] = nextAction;
                     currentDepth += 1;
-                    Debug.Log("action " + nextAction);
+                    //Debug.Log("action " + nextAction);
                 }
                 else
                 {
                     currentDepth -= 1;
-                    Debug.Log("no action");
+                    //Debug.Log("no action");
                 }
-                Debug.Log("Current depth: " + currentDepth);
+                //Debug.Log("Current depth: " + currentDepth);
             }
         }
         Debug.Log("search end");
