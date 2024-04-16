@@ -33,7 +33,7 @@ public class PushBoxSearch : MonoBehaviour
         }
     }
 
-    public static List<DirectionEnum> PushBoxPathSearch(int[,] map, Vector2 initialPlayerPos, Vector2 initialCratePos, Vector2 goalPos)
+    public static Stack<DirectionEnum> PushBoxPathSearch(int[,] map, Vector2 initialPlayerPos, Vector2 initialCratePos, Vector2 goalPos)
     {
         Queue<State> queue = new Queue<State>();
         HashSet<State> visited = new HashSet<State>();
@@ -54,7 +54,12 @@ public class PushBoxSearch : MonoBehaviour
             if (currentState.cratePos.x == goalPos.x && currentState.cratePos.y == goalPos.y)
             {
                 //Debug.Log("Goal reached!");
-                return moves[currentState];
+                Stack<DirectionEnum> dirStack = new Stack<DirectionEnum>();
+                for (int i = moves[currentState].Count - 1; i >= 0; i--)
+                {
+                    dirStack.Push(moves[currentState][i]);
+                }
+                return dirStack;
             }
 
             // Generate all possible moves
@@ -146,5 +151,31 @@ public class PushBoxSearch : MonoBehaviour
         }
 
         return true;
+    }
+
+    public static Vector2 PosAfterMoves(Stack<DirectionEnum> moves, Vector2 playerPos)
+    {
+        Vector2 newPlayerPos = playerPos;
+        for (int i = 0; i < moves.Count; i++)
+        {
+            switch(moves.Pop())
+            {
+                case DirectionEnum.Left:
+                    newPlayerPos.x -= 1;
+                    break;
+                case DirectionEnum.Right:
+                    newPlayerPos.x += 1;
+                    break;
+                case DirectionEnum.Up:
+                    newPlayerPos.y += 1;
+                    break;
+                case DirectionEnum.Down:
+                    newPlayerPos.y -= 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return newPlayerPos;
     }
 }
