@@ -243,7 +243,8 @@ public class MapManager : MonoBehaviour
                         currentMap.objectsOnMap[priorPos].gameObject.SetActive(false);
                         currentMap.objectsOnMap.Remove(pos);
                         currentMap.objectsOnMap.Remove(priorPos);
-                        return -1;
+
+                        return 1;
                     }
 
                     if(!currentMap.objectsOnMap[pos].GetComponent<InteractibleObject>().canPush)
@@ -273,7 +274,10 @@ public class MapManager : MonoBehaviour
                     if (CheckTilePlayerMovement(direction, pos, newPos) != -1)
                     {
                         newPosition = new Vector3(newPos.Item1, currentMap.mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
-                        MoveObject(newPosition, pos, newPos);
+
+                        if(currentMap.objectsOnMap.ContainsKey(pos))
+                            MoveObject(newPosition, pos, newPos);
+    
                         return 1;
                     }
                 }
@@ -283,14 +287,39 @@ public class MapManager : MonoBehaviour
                     return 1;
                 }
             }
-            //Entering Hole with block in it
-            //Checks if height difference is -1, and if player is the one being checked, and if hole is filled
-            else if ((priorPos == playerLocation && currentMap.objectsOnMap.ContainsKey(pos) || (priorPos != playerLocation && !currentMap.objectsOnMap.ContainsKey(pos)))
-                && currentMap.mapHeights[priorPos.Item1, priorPos.Item2] - 1 == currentMap.mapHeights[pos.Item1, pos.Item2])
+            //Pushing Block into hole. Raises ground level
+            else if (priorPos != playerLocation && !currentMap.objectsOnMap.ContainsKey(pos) && currentMap.objectsOnMap[priorPos].GetComponent<InteractibleObject>().type == InteractibleObject.ObjectType.BasicBlock)
             {
-                if (currentMap.objectsOnMap.ContainsKey(pos) && currentMap.objectsOnMap[pos].GetComponent<InteractibleObject>().type != InteractibleObject.ObjectType.BasicBlock)
-                    return -1;
-                return 2;
+                Tuple<int, int> newPos = priorPos;
+                switch (direction)
+                {
+                    case DirectionEnum.Left:
+                        newPos = new Tuple<int, int>(priorPos.Item1 - 1, priorPos.Item2);
+                        break;
+                    case DirectionEnum.Right:
+                        newPos = new Tuple<int, int>(priorPos.Item1 + 1, priorPos.Item2);
+                        break;
+                    case DirectionEnum.Up:
+                        newPos = new Tuple<int, int>(priorPos.Item1, priorPos.Item2 + 1);
+                        break;
+                    case DirectionEnum.Down:
+                        newPos = new Tuple<int, int>(priorPos.Item1, priorPos.Item2 - 1);
+                        break;
+                }
+
+                Vector3 newPosition = new Vector3(newPos.Item1, currentMap.mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
+                MoveObject(newPosition, priorPos, newPos);
+
+                Vector3 newPlayerPos = new Vector3(priorPos.Item1, currentMap.mapHeights[priorPos.Item1, priorPos.Item2] + 1, priorPos.Item2);
+
+                UpdatePlayerLocation(newPlayerPos,priorPos);
+
+                currentMap.objectsOnMap[pos].GetComponent<MoveBox>().isFillingHole = true;
+                currentMap.objectsOnMap[pos].GetComponent<MoveBox>().newMapPosition = newPos;
+                currentMap.objectsOnMap.Remove(pos);
+                currentMap.mapHeights[pos.Item1, pos.Item2]++;
+
+                return -1;
             }
             //Exiting Hole
             else if (currentMap.objectsOnMap.ContainsKey(priorPos) && currentMap.mapHeights[priorPos.Item1, priorPos.Item2] + 1 == currentMap.mapHeights[pos.Item1, pos.Item2])
