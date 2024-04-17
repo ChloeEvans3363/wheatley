@@ -11,8 +11,6 @@ public class WorldState
 
     List<Goal> Goals;
 
-    //List<Action> Actions;
-
     List<ActionTypes> Actions;
 
     public Stack<Action> SatisfiedActions { get; set; } = null;
@@ -32,6 +30,12 @@ public class WorldState
     public Dictionary<Tuple<int, int>, GameObject> moveableBlocks =
         new Dictionary<Tuple<int, int>, GameObject>();
 
+    public Dictionary<Tuple<int, int>, GameObject> doors =
+    new Dictionary<Tuple<int, int>, GameObject>();
+
+    public Dictionary<Tuple<int, int>, GameObject> doorKeys =
+    new Dictionary<Tuple<int, int>, GameObject>();
+
     public GameObject player;
 
     public GameObject playerTile;
@@ -44,8 +48,7 @@ public class WorldState
     {
         win,
         moveBlock,
-        key,
-        door
+        openDoor
     }
 
     public WorldState(Map map)
@@ -62,21 +65,19 @@ public class WorldState
         endTilePos = endTile.transform.position;
 
         Goals = new List<Goal>();
-        //Actions = new List<Action>();
         Actions = new List<ActionTypes>();
 
         GetPositions();
-        GetMoveableBlocks();
+        SortObjects();
         GetPits();
 
         Goals.Add(new G_MoveBlock());
         Goals.Add(new G_Win());
-
-        //Actions.Add(new A_MoveBlock());
-        //Actions.Add(new A_GoToWin());
+        Goals.Add(new G_OpenDoor());
 
         Actions.Add(ActionTypes.win);
         Actions.Add(ActionTypes.moveBlock);
+        Actions.Add(ActionTypes.openDoor);
     }
 
     public WorldState(WorldState state)
@@ -90,12 +91,12 @@ public class WorldState
         endTilePos = endTile.transform.position;
 
         objectsPositions = state.objectsPositions;
-
         moveableBlocks = state.moveableBlocks;
         pits = state.pits;
+        doorKeys = state.doorKeys;
+        doors = state.doors;
 
         Goals = new List<Goal>(state.Goals);
-        //Actions = new List<Action>(state.Actions);
         Actions = new List<ActionTypes>(state.Actions);
     }
 
@@ -136,12 +137,6 @@ public class WorldState
     {
         SatisfiedActions = new Stack<Action>();
 
-        /*
-        foreach(Action action in Actions)
-            if(action.PreconditionsMet(this))
-                SatisfiedActions.Push(action);
-        */
-
         foreach(ActionTypes type in Actions)
         {
             Action action = null;
@@ -152,6 +147,9 @@ public class WorldState
                     break;
                 case ActionTypes.moveBlock:
                     action = new A_MoveBlock();
+                    break;
+                case ActionTypes.openDoor:
+                    action = new A_OpenDoor();
                     break;
             }
             if (action != null && action.PreconditionsMet(this))
@@ -325,20 +323,27 @@ public class WorldState
         return newDictionary;
     }
 
-    private void GetMoveableBlocks()
+    private void SortObjects()
     {
-
         foreach (var key in objectsOnMap.Keys)
         {
-            if(objectsOnMap[key] != null && objectsOnMap[key].tag == "MoveableBlock" &&
+            if (objectsOnMap[key] != null && objectsOnMap[key].tag == "MoveableBlock" &&
                 objectsOnMap[key].GetComponent<InteractibleObject>().canPush)
                 moveableBlocks.Add(key, objectsOnMap[key]);
+
+            if (objectsOnMap[key] != null && objectsOnMap[key].tag == "Door" &&
+                objectsOnMap[key].GetComponent<InteractibleObject>().canPush)
+                doors.Add(key, objectsOnMap[key]);
+
+            if (objectsOnMap[key] != null && objectsOnMap[key].tag == "Key" &&
+                objectsOnMap[key].GetComponent<InteractibleObject>().canPush)
+                doorKeys.Add(key, objectsOnMap[key]);
+
         }
     }
 
     private void GetPits()
     {
-
         foreach (var key in floorElements.Keys)
         {
             // This is the y level for pit blocks
@@ -346,15 +351,5 @@ public class WorldState
                 == player.transform.position.y - 2)
                 pits.Add(key, floorElements[key]);
         }
-    }
-
-    private Dictionary<Tuple<int, int>, GameObject> GetDoors()
-    {
-        return null;
-    }
-
-    private Dictionary<Tuple<int, int>, GameObject> GetKeys()
-    {
-        return null;
     }
 }

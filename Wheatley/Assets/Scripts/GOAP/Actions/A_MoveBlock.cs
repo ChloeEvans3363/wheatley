@@ -12,7 +12,7 @@ public class A_MoveBlock : Action
 
     public override bool PreconditionsMet(WorldState state)
     {
-        Map map = MapManager.Instance.currentMap;
+        Map map = Instance.currentMap;
 
         if (state.pits.Count > 0 && state.moveableBlocks.Count > 0)
         {
@@ -41,7 +41,7 @@ public class A_MoveBlock : Action
 
     public override float GetCost(WorldState state)
     {
-        Map map = MapManager.Instance.currentMap;
+        Map map = Instance.currentMap;
 
         if (state.pits.Count > 0 && state.moveableBlocks.Count > 0)
         {
@@ -69,7 +69,7 @@ public class A_MoveBlock : Action
     public override WorldState OnActivated(WorldState state)
     {
         WorldState successorState = state.Clone();
-        Map map = MapManager.Instance.currentMap;
+        Map map = Instance.currentMap;
 
         if (successorState.pits.Count > 0 && successorState.moveableBlocks.Count > 0)
         {
@@ -117,12 +117,12 @@ public class A_MoveBlock : Action
         return successorState;
     }
 
-    public override Stack<MapManager.DirectionEnum> GetDirections(GameObject start, GameObject end)
+    public override Stack<DirectionEnum> GetDirections(GameObject start, GameObject end)
     {
         Vector2 playerPos = new Vector2(start.transform.position.x, start.transform.position.z);
         Vector2 cratePos = new Vector2(aBlock.transform.position.x, aBlock.transform.position.z);
         Vector2 pitPos = new Vector2(aPit.transform.position.x, aPit.transform.position.z);
-        Map map = MapManager.Instance.currentMap;
+        Map map = Instance.currentMap;
 
         return PushBoxSearch.PushBoxPathSearch(map.mapHeights, playerPos,
             cratePos, pitPos);

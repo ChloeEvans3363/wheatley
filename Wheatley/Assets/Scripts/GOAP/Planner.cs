@@ -14,7 +14,6 @@ public class Planner
 
         Action[] currentPlan = new Action[maxDepth];
         states[0] = state;
-        WorldState currentState = state;
         float bestCost = float.MaxValue;
         float bestContentment = float.MinValue;
         int currentDepth = 0;
