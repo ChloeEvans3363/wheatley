@@ -13,7 +13,9 @@ public class A_GoToWin : Action
         state.DisconnectTiles();
         state.GenerateConnections();
 
-        return AStar.CanFindPath(start, end);
+        if(start != null && end != null)
+            return AStar.CanFindPath(start, end);
+        return false;
     }
 
     public override float GetCost(WorldState state)
