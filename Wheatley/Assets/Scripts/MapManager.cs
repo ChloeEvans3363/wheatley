@@ -90,15 +90,16 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        Camera.main.transform.position = new Vector3(map.mapHeights.GetUpperBound(0) / 2, 10, map.mapHeights.GetLowerBound(1) - 3);
+        int xOffset = map.mapHeights.GetUpperBound(0) / 2;
+        Camera.main.transform.position = new Vector3(xOffset, 10, map.mapHeights.GetLowerBound(1) - 3);
 
         for (int i = 0; i < map.numPushBoxes; i++)
         {
-            GameObject block = Instantiate(moveableBlock, new Vector3(-0.3f, i * 0.02f, -1.8f), Quaternion.identity, this.transform);
+            GameObject block = Instantiate(moveableBlock, new Vector3(-2.4f+ xOffset, i * 0.02f, -1.8f), Quaternion.identity, this.transform);
             block.GetComponent<InteractibleObject>().canPush = true;
             block.GetComponent<InteractibleObject>().UpdateTint();
             block.GetComponent<InteractibleObject>().type = InteractibleObject.ObjectType.BasicBlock;
-            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(-0.3f, i * 0.02f, -1.8f);
+            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(-2.4f+ xOffset, i * 0.02f, -1.8f);
             block.GetComponent<MoveBox>().mapIdentity = i + 1;
         }
 
@@ -106,11 +107,11 @@ public class MapManager : MonoBehaviour
 
         for (int i = map.numPushBoxes; i < map.numImmoveableBoxes + map.numPushBoxes; i++)
         {
-            GameObject block = Instantiate(moveableBlock, new Vector3(2.0f, i * 0.02f, -1.8f), Quaternion.identity, this.transform);
+            GameObject block = Instantiate(moveableBlock, new Vector3(xOffset, i * 0.02f, -1.8f), Quaternion.identity, this.transform);
             block.GetComponent<InteractibleObject>().canPush = false;
             block.GetComponent<InteractibleObject>().UpdateTint();
             block.GetComponent<InteractibleObject>().type = InteractibleObject.ObjectType.BasicBlock;
-            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(2.0f, i*0.02f, -1.8f);
+            block.GetComponent<MoveBox>().deselectedLocation = new Vector3(xOffset, i*0.02f, -1.8f);
             block.GetComponent<MoveBox>().mapIdentity = i + 1;
         }
 
