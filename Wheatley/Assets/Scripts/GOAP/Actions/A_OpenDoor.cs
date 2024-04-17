@@ -104,11 +104,6 @@ public class A_OpenDoor : Action
                             aDoor = successorState.objectsOnMap[dKey];
                             aKey = successorState.objectsOnMap[kKey];
 
-                            successorState.objectsOnMap.Add(dKey, successorState.objectsOnMap[kKey]);
-                            successorState.objectsPositions.Add(dKey,
-                                new Vector3(successorState.doors[dKey].transform.position.x,
-                                1, successorState.doors[dKey].transform.position.z));
-
                             successorState.objectsOnMap.Remove(kKey);
                             successorState.objectsOnMap.Remove(dKey);
                             successorState.objectsPositions.Remove(kKey);

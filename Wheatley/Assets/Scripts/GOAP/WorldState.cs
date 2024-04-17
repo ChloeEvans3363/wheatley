@@ -332,11 +332,11 @@ public class WorldState
                 moveableBlocks.Add(key, objectsOnMap[key]);
 
             if (objectsOnMap[key] != null && objectsOnMap[key].tag == "Door" &&
-                objectsOnMap[key].GetComponent<InteractibleObject>().canPush)
+                objectsOnMap[key].GetComponent<InteractibleObject>())
                 doors.Add(key, objectsOnMap[key]);
 
             if (objectsOnMap[key] != null && objectsOnMap[key].tag == "Key" &&
-                objectsOnMap[key].GetComponent<InteractibleObject>().canPush)
+                objectsOnMap[key].GetComponent<InteractibleObject>())
                 doorKeys.Add(key, objectsOnMap[key]);
 
         }
