@@ -55,7 +55,7 @@ public class MapData : MonoBehaviour
                                         DirectionEnum.Up,
                                         DirectionEnum.Up,
                                         DirectionEnum.Right};
-        Map map1 = new Map(mapHeights1, intendedPath1, new Tuple<int, int>(0, 6), new Tuple<int, int>(8, 6), 1, 0);
+        Map map1 = new Map(mapHeights1, intendedPath1, new Tuple<int, int>(0, 6), new Tuple<int, int>(8, 6), 0, 18);
         mapList.Add(map1);
 
         int[,] mapHeights2 =

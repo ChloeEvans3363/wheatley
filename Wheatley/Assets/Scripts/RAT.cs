@@ -2,19 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 using static MapManager;
 
 public class RAT : MonoBehaviour
 {
     Stack<DirectionEnum> path = new Stack<DirectionEnum>();
+    List<DirectionEnum> utilizedPath = new List<DirectionEnum>();
     private GameObject player;
     private GameObject end;
     Vector3 endPosition;
     private float waitTime = 1f;
     private float simTime = 0.25f;
     private int count = 0;
-    private bool simulatingPath;
+    private bool simulatingPath = false;
+    private bool checkedPath = false;
 
     // The tile the character is moving to.
     private GameObject TargetTile { get; set; } = null;
@@ -63,16 +66,46 @@ public class RAT : MonoBehaviour
                 ManageScenes.Instance.DisplaySearchFailed();
             }
         }
+
+        if (Instance.playerLocation.Item1 == Instance.currentMap.endLocation.Item1 && Instance.playerLocation.Item2 == Instance.currentMap.endLocation.Item2 && !simulatingPath && !checkedPath)
+        {
+            bool matched = true;
+            if (Instance.currentMap.intendedPath.Length != utilizedPath.Count)
+            {
+                matched = false;
+            }
+            else
+            {
+                for (int i = 0; i < Math.Min(Instance.currentMap.intendedPath.Length, utilizedPath.Count); i++)
+                {
+                    if (Instance.currentMap.intendedPath[i] != utilizedPath[i])
+                    {
+                        matched = false;
+                        break;
+                    }
+                }
+            }
+
+            if (matched)
+            {
+                Debug.Log("Success!");
+            }
+            else
+            {
+                Debug.Log("Did not use the intended path");
+            }
+            checkedPath = true;
+        }
     }
 
     private IEnumerator Move(Action[] plan)
     {
         while (path.Count > 0)
         {
-            Instance.MovePlayer(path.Pop());
+            utilizedPath.Add(path.Pop());
+            Instance.MovePlayer(utilizedPath[utilizedPath.Count - 1]);
             yield return new WaitForSeconds(waitTime);
         }
-
         if (count < plan.Length)
         {
             path = plan[count].GetDirections(TargetTile, Instance.CurrentTile((int)endPosition.x, (int)endPosition.z));
