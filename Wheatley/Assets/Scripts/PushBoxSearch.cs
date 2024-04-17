@@ -155,7 +155,7 @@ public class PushBoxSearch : MonoBehaviour
         Instance.currentMap.objectsOnMap.TryGetValue(new Tuple<int, int>((int)pos.x, (int)pos.y), out gameObj);
         if (gameObj != null && !gameObj.GetComponent<InteractibleObject>().canPush)
         {
-            //return false;
+            return false;
         }
 
         return true;
