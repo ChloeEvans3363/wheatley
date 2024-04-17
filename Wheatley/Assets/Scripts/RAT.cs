@@ -13,7 +13,7 @@ public class RAT : MonoBehaviour
     private GameObject player;
     private GameObject end;
     Vector3 endPosition;
-    private float waitTime = 1f;
+    private float waitTime = 0.4f;
     private float simTime = 0.25f;
     private int count = 0;
     private bool simulatingPath = false;
