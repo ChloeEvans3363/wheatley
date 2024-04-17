@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static MapManager;
@@ -64,16 +65,17 @@ public class PushBoxSearch : MonoBehaviour
 
             // Generate all possible moves
             List<Vector2> possibleMoves = new List<Vector2>()
-        {
-            new Vector2(currentState.playerPos.x + 1, currentState.playerPos.y),
-            new Vector2(currentState.playerPos.x - 1, currentState.playerPos.y),
-            new Vector2(currentState.playerPos.x, currentState.playerPos.y + 1),
-            new Vector2(currentState.playerPos.x, currentState.playerPos.y - 1)
-        };
+            {
+                new Vector2(currentState.playerPos.x + 1, currentState.playerPos.y),
+                new Vector2(currentState.playerPos.x - 1, currentState.playerPos.y),
+                new Vector2(currentState.playerPos.x, currentState.playerPos.y + 1),
+                new Vector2(currentState.playerPos.x, currentState.playerPos.y - 1)
+            };
 
             // Apply valid moves
             foreach (Vector2 move in possibleMoves)
             {
+                DirectionEnum dir = GetDirection(currentState.playerPos, move);
                 if (IsValidMove(map, move))
                 {
                     // Clone the current state to create a new state
@@ -148,6 +150,12 @@ public class PushBoxSearch : MonoBehaviour
         if (map[(int)pos.x, (int)pos.y] == -1 || map[(int)pos.x, (int)pos.y] == 0)
         {
             return false;
+        }
+        GameObject gameObj;
+        Instance.currentMap.objectsOnMap.TryGetValue(new Tuple<int, int>((int)pos.x, (int)pos.y), out gameObj);
+        if (gameObj != null && !gameObj.GetComponent<InteractibleObject>().canPush)
+        {
+            //return false;
         }
 
         return true;

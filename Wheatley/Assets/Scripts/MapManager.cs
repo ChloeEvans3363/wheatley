@@ -54,7 +54,7 @@ public class MapManager : MonoBehaviour
         loadMap(currentMap);
     }
 
-    private void loadMap(Map map)
+    public void loadMap(Map map)
     {
         playerLocation = map.playerStart;
         map.objectsOnMap = new Dictionary<Tuple<int, int>, GameObject>();
@@ -194,7 +194,7 @@ public class MapManager : MonoBehaviour
 
     //Check tile for object, let object recursively call check tile 
     //if no object and available space, move objects 
-    int CheckTilePlayerMovement(DirectionEnum direction, Tuple<int,int> priorPos, Tuple<int,int> pos)
+    public int CheckTilePlayerMovement(DirectionEnum direction, Tuple<int,int> priorPos, Tuple<int,int> pos)
     {
 
         if (0 <= pos.Item1 && pos.Item1 < currentMap.mapHeights.GetLength(0) && 0 <= pos.Item2 && pos.Item2 < currentMap.mapHeights.GetLength(1) && currentMap.mapHeights[pos.Item1, pos.Item2] >= 0)

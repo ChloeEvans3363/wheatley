@@ -36,7 +36,7 @@ public class RAT : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("I'm getting called");
+            Instance.loadMap(Instance.currentMap.CleanMap());
             for (int i = MapManager.Instance.currentMap.intendedPath.Length - 1; i >= 0; i--)
             {
                 path.Push(MapManager.Instance.currentMap.intendedPath[i]);
@@ -128,6 +128,7 @@ public class RAT : MonoBehaviour
         }
         if (path.Count == 0)
         {
+            Instance.loadMap(MapData.mapList[Instance.currentMapIndex]);
             ManageScenes.Instance.ReloadScene();
             simulatingPath = false;
         }
