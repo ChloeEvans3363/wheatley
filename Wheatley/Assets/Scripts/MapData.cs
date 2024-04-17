@@ -78,11 +78,11 @@ public class MapData : MonoBehaviour
             {-1, -1, 1},
             {-1, -1, 1},
             {-1, -1, 1},
+            {-1, 1, 1},
+            {1, 1, 1},
+            {1, 1, 1},
             {-1, -1, 1},
-            {1, 1, 1},
-            {1, -1, 1},
-            {1, -1, 1},
-            {1, 1, 1},
+            {-1, -1, 0},
             {-1, -1, 1}
         };
         DirectionEnum[] intendedPath3 = {DirectionEnum.Right,
@@ -90,17 +90,42 @@ public class MapData : MonoBehaviour
                                         DirectionEnum.Right,
                                         DirectionEnum.Right,
                                         DirectionEnum.Down,
+                                        DirectionEnum.Right,
                                         DirectionEnum.Down,
+                                        DirectionEnum.Right,
                                         DirectionEnum.Up,
+                                        DirectionEnum.Left,
                                         DirectionEnum.Up,
                                         DirectionEnum.Right,
                                         DirectionEnum.Right,
                                         DirectionEnum.Right,
                                         DirectionEnum.Right};
-        Map map3 = new Map(mapHeights3, intendedPath3, new Tuple<int, int>(0, 2), new Tuple<int, int>(8, 2), 0, 8);
-        map3.AddKey(new Tuple<int, int>(4, 0));
-        map3.AddDoor(new Tuple<int, int>(7, 2));
+        Map map3 = new Map(mapHeights3, intendedPath3, new Tuple<int, int>(0, 2), new Tuple<int, int>(8, 2), 1, 0);
+        map3.AddKey(new Tuple<int, int>(4, 2));
+        map3.AddDoor(new Tuple<int, int>(5, 2));
         mapList.Add(map3);
+
+        int[,] mapHeights4 =
+        {
+            {-1, 0, -1, 0, -1, -1},
+            {1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, -1, 1},
+            {-1, -1, 0, -1, -1, 1}
+        };
+        DirectionEnum[] intendedPath4 = {DirectionEnum.Right,
+                                        DirectionEnum.Up,
+                                        DirectionEnum.Left,
+                                        DirectionEnum.Up,
+                                        DirectionEnum.Right,
+                                        DirectionEnum.Up,
+                                        DirectionEnum.Left,
+                                        DirectionEnum.Up,
+                                        DirectionEnum.Up,
+                                        DirectionEnum.Right,
+                                        DirectionEnum.Right,
+                                        DirectionEnum.Down};
+        Map map4 = new Map(mapHeights4, intendedPath4, new Tuple<int, int>(1, 0), new Tuple<int, int>(3, 5), 4, 1);
+        mapList.Add(map4);
     }
 }
 
