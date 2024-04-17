@@ -64,6 +64,15 @@ public class ManageScenes : MonoBehaviour
         needsToRestart = true;
     }
 
+    public void LoadNextMap()
+    {
+        if (MapManager.currentMapIndex != MapData.mapList.Count - 1)
+        {
+            MapManager.currentMapIndex += 1;
+            ReloadScene();
+        }
+    }
+
     public void SetNumPushBlocks(int num)
     {
         pushBlockCount = num;

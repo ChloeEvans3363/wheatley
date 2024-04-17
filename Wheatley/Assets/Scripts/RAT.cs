@@ -128,7 +128,7 @@ public class RAT : MonoBehaviour
         }
         if (path.Count == 0)
         {
-            Instance.loadMap(MapData.mapList[Instance.currentMapIndex]);
+            Instance.loadMap(MapData.mapList[MapManager.currentMapIndex]);
             ManageScenes.Instance.ReloadScene();
             simulatingPath = false;
         }
