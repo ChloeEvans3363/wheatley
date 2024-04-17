@@ -91,11 +91,11 @@ public class RAT : MonoBehaviour
 
             if (matched)
             {
-                Debug.Log("Success!");
+                ManageScenes.Instance.DisplaySuccess();
             }
             else
             {
-                Debug.Log("Did not use the intended path");
+                ManageScenes.Instance.DisplaySearchFailed();
             }
             checkedPath = true;
         }
