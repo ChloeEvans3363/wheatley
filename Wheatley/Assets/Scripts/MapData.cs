@@ -6,6 +6,7 @@ using static MapManager;
 
 public class MapData : MonoBehaviour
 {
+    [SerializeField]
     public static List<Map> mapList = new List<Map>();
 
     void Awake()
@@ -54,12 +55,6 @@ public class MapData : MonoBehaviour
                                         DirectionEnum.Up,
                                         DirectionEnum.Up,
                                         DirectionEnum.Right};
-
-        int[,] path1 =
-        {
-            {0, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 5, 5, 6, 7, 7, 7, 7, 7, 7, 7, 8},
-            {6, 6, 5, 4, 3, 2, 1 ,0, 0, 0, 1, 2, 3, 4, 5, 6, 6, 6, 5, 4, 3, 2, 1, 0, 0, 0, 1, 2, 3, 4, 5, 6, 6},
-        };
         Map map1 = new Map(mapHeights1, intendedPath1, new Tuple<int, int>(0, 6), new Tuple<int, int>(8, 6), 1, 0);
         mapList.Add(map1);
 

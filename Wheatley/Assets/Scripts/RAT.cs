@@ -12,8 +12,9 @@ public class RAT : MonoBehaviour
     private GameObject end;
     Vector3 endPosition;
     private float waitTime = 1f;
-
+    private float simTime = 0.25f;
     private int count = 0;
+    private bool simulatingPath;
 
     // The tile the character is moving to.
     private GameObject TargetTile { get; set; } = null;
@@ -30,7 +31,16 @@ public class RAT : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("I'm getting called");
+            for (int i = MapManager.Instance.currentMap.intendedPath.Length - 1; i >= 0; i--)
+            {
+                path.Push(MapManager.Instance.currentMap.intendedPath[i]);
+            }
+            simulatingPath = true;
+            StartCoroutine(SimulatePath());
+        }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             WorldState initialState = new WorldState(MapManager.Instance.currentMap);
@@ -68,6 +78,20 @@ public class RAT : MonoBehaviour
             path = plan[count].GetDirections(TargetTile, Instance.CurrentTile((int)endPosition.x, (int)endPosition.z));
             count++;
             yield return StartCoroutine(Move(plan));
+        }
+    }
+
+    private IEnumerator SimulatePath()
+    {
+        while (path.Count > 0)
+        {
+            MapManager.Instance.MovePlayer(path.Pop());
+            yield return new WaitForSeconds(simTime);
+        }
+        if (path.Count == 0)
+        {
+            ManageScenes.Instance.ReloadScene();
+            simulatingPath = false;
         }
     }
 }
