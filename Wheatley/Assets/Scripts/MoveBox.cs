@@ -8,10 +8,11 @@ using UnityEngine;
 public class MoveBox : MonoBehaviour
 {
     Vector3 newPosition;
-    private Tuple<int, int> newMapPosition;
+    public Tuple<int, int> newMapPosition;
 
     protected Camera Camera { get; private set; }
     bool placed;
+    public bool isFillingHole = false;
 
     [SerializeField] protected LayerMask _raycastLayerMask;
     [SerializeField] protected float _raycastDistance = 100f;
@@ -56,8 +57,14 @@ public class MoveBox : MonoBehaviour
     {
         if (DetectBlock(LayerMask.GetMask("Moveable Block")) && placed)
         {
+            if (newMapPosition.Item1 == MapManager.Instance.playerLocation.Item1 && newMapPosition.Item2 == MapManager.Instance.playerLocation.Item2)
+                return;
+
             MapManager.Instance.currentMap.objectsOnMap.Remove(newMapPosition);
             placed = false;
+
+            if (isFillingHole)
+                MapManager.Instance.currentMap.mapHeights[newMapPosition.Item1, newMapPosition.Item2]--;
 
             if (interactibleObject.canPush)
                 ManageScenes.Instance.UpdateNumPushBlocks(1);
@@ -67,7 +74,7 @@ public class MoveBox : MonoBehaviour
         else if (DetectBlock(LayerMask.GetMask("Moveable Block")) && !placed && mapIdentity != MapManager.Instance.selectedBlock)
         {
             MapManager.Instance.selectedBlock = mapIdentity;
-        }
+        } 
         else if (DetectDropTarget())
         {
             MapManager.Instance.currentMap.objectsOnMap.Add(newMapPosition, this.gameObject);
@@ -92,7 +99,8 @@ public class MoveBox : MonoBehaviour
         }
 
         Tuple<int, int> endloc = MapManager.Instance.currentMap.endLocation;
-        if (MapManager.Instance.currentMap.objectsOnMap.ContainsKey(newMapPosition)
+        if (MapManager.Instance.currentMap.objectsOnMap.ContainsKey(newMapPosition) 
+            || MapManager.Instance.currentMap.mapHeights[newMapPosition.Item1, newMapPosition.Item2] != 1
             || (newMapPosition.Item1 == endloc.Item1 && newMapPosition.Item2 == endloc.Item2)
             || (newMapPosition.Item1 == MapManager.Instance.playerLocation.Item1 && newMapPosition.Item2 == MapManager.Instance.playerLocation.Item2))
         {
