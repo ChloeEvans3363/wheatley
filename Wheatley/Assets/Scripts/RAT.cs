@@ -47,7 +47,7 @@ public class RAT : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             WorldState initialState = new WorldState(MapManager.Instance.currentMap);
-            Action[] plan = Planner.plan(initialState, 4);
+            Action[] plan = Planner.plan(initialState, 10);
             endPosition = end.transform.position;
 
             if (plan != null)
