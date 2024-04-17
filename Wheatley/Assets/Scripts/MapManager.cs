@@ -310,16 +310,12 @@ public class MapManager : MonoBehaviour
                 Vector3 newPosition = new Vector3(newPos.Item1, currentMap.mapHeights[newPos.Item1, newPos.Item2] + 1, newPos.Item2);
                 MoveObject(newPosition, priorPos, newPos);
 
-                Vector3 newPlayerPos = new Vector3(priorPos.Item1, currentMap.mapHeights[priorPos.Item1, priorPos.Item2] + 1, priorPos.Item2);
-
-                UpdatePlayerLocation(newPlayerPos,priorPos);
-
                 currentMap.objectsOnMap[pos].GetComponent<MoveBox>().isFillingHole = true;
                 currentMap.objectsOnMap[pos].GetComponent<MoveBox>().newMapPosition = newPos;
                 currentMap.objectsOnMap.Remove(pos);
                 currentMap.mapHeights[pos.Item1, pos.Item2]++;
 
-                return -1;
+                return 1;
             }
             //Exiting Hole
             else if (currentMap.objectsOnMap.ContainsKey(priorPos) && currentMap.mapHeights[priorPos.Item1, priorPos.Item2] + 1 == currentMap.mapHeights[pos.Item1, pos.Item2])
