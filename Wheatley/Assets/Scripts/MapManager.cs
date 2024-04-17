@@ -149,25 +149,10 @@ public class MapManager : MonoBehaviour
                     // and the tile above us is not an empty obstacle...
                     if (currentMap.floorElements[new Tuple<int, int>(i - 1, j)] != null)
                     {
-                        // Checks if there is an object in the same place and if that object is ground level
-                        // If so connect the ground to the object
-                        if (currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)) 
-                            && player.transform.position.y - 1 == currentMap.objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
-                        {
-                            ConnectTiles(currentMap.floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.objectsOnMap[new Tuple<int, int>(i, j)]);
-                        }
                         // Otherwise if there isn't an object in the way
-                        else if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
                         {
-                            // Check if the piece above us has an object on ground level
-                            // If so connect the ground node to that object
-                            if(player.transform.position.y - 1 != currentMap.floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y && currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
-                            {
-                                ConnectTiles(currentMap.objectsOnMap[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.floorElements[new Tuple<int, int>(i, j)]);
-                            }
-                            // Otherwise if the current ground piece is floor level
-                            // Connect the ground piece to another ground piece
-                            else if(player.transform.position.y - 1 == currentMap.floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
+                            if (player.transform.position.y - 1 == currentMap.floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
                             {
                                 ConnectTiles(currentMap.floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, currentMap.floorElements[new Tuple<int, int>(i, j)]);
                             }
@@ -179,25 +164,10 @@ public class MapManager : MonoBehaviour
                     // and the tile to the left is not an empty obstacle...
                     if (currentMap.floorElements[new Tuple<int, int>(i, j - 1)] != null)
                     {
-                        // Checks if there is an object in the same place and if that object is ground level
-                        // If so connect the ground to the object
-                        if (currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j))
-                            && player.transform.position.y - 1 == currentMap.objectsOnMap[new Tuple<int, int>(i, j)].transform.position.y)
-                        {
-                            ConnectTiles(currentMap.floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.objectsOnMap[new Tuple<int, int>(i, j)]);
-                        }
                         // Otherwise if there isn't an object in the way
-                        else if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
                         {
-                            // Check if the piece to the left has an object on ground level
-                            // If so connect the ground node to that object
-                            if (player.transform.position.y - 1 != currentMap.floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y && currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
-                            {
-                                ConnectTiles(currentMap.objectsOnMap[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.floorElements[new Tuple<int, int>(i, j)]);
-                            }
-                            // Otherwise if the current ground piece is floor level
-                            // Connect the ground piece to another ground piece
-                            else if (player.transform.position.y - 1 == currentMap.floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
+                            if (player.transform.position.y - 1 == currentMap.floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
                             {
                                 ConnectTiles(currentMap.floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, currentMap.floorElements[new Tuple<int, int>(i, j)]);
                             }
@@ -312,6 +282,7 @@ public class MapManager : MonoBehaviour
 
                 currentMap.objectsOnMap[pos].GetComponent<MoveBox>().isFillingHole = true;
                 currentMap.objectsOnMap[pos].GetComponent<MoveBox>().newMapPosition = newPos;
+                currentMap.floorElements[pos] = currentMap.objectsOnMap[pos];
                 currentMap.objectsOnMap.Remove(pos);
                 currentMap.mapHeights[pos.Item1, pos.Item2]++;
 
