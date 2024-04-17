@@ -215,7 +215,7 @@ public class WorldState
                             ConnectTiles(floorElements[new Tuple<int, int>(i - 1, j)], DirectionEnum.Down, objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
                         // Otherwise if there isn't an object in the way
-                        else if (!objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
+                        else if (!objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
                         {
                             // Check if the piece above us has an object on ground level
                             // If so connect the ground node to that object
@@ -245,7 +245,7 @@ public class WorldState
                             ConnectTiles(floorElements[new Tuple<int, int>(i, j - 1)], DirectionEnum.Right, objectsOnMap[new Tuple<int, int>(i, j)]);
                         }
                         // Otherwise if there isn't an object in the way
-                        else if (!objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
+                        else if (!objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
                         {
                             // Check if the piece to the left has an object on ground level
                             // If so connect the ground node to that object
