@@ -551,13 +551,13 @@ public class MapManager : MonoBehaviour
                     && objects.ContainsKey(rightPos)
                     && objects[rightPos].GetComponent<InteractibleObject>().heldWord != "")
                 {
-                    Debug.Log(objects[key].GetComponent<InteractibleObject>().heldWord + objects[rightPos].GetComponent<InteractibleObject>().heldWord);
+                    //Debug.Log(objects[key].GetComponent<InteractibleObject>().heldWord + objects[rightPos].GetComponent<InteractibleObject>().heldWord);
                 }
                 else if (key.Item1 < currentMap.mapHeights.GetLength(1) - 2
                             && objects.ContainsKey(bottomPos)
                             && objects[bottomPos].GetComponent<InteractibleObject>().heldWord != "")
                 {
-                    Debug.Log(objects[key].GetComponent<InteractibleObject>().heldWord + objects[bottomPos].GetComponent<InteractibleObject>().heldWord);
+                    //Debug.Log(objects[key].GetComponent<InteractibleObject>().heldWord + objects[bottomPos].GetComponent<InteractibleObject>().heldWord);
                 }
             }
         }

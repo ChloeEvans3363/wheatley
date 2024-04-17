@@ -47,16 +47,19 @@ public class RAT : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             WorldState initialState = new WorldState(MapManager.Instance.currentMap);
-            Action[] plan = Planner.plan(initialState, 10);
+            Action[] plan = Planner.plan(initialState, 5);
             endPosition = end.transform.position;
 
             if (plan != null)
             {
-                /*
+                int test = 0;
                 Debug.Log("DFS Plan:");
                 foreach (Action action in plan)
-                    Debug.Log(action);
-                */
+                {
+                    Debug.Log(test + ": " + action);
+                    test++;
+                }
+                
 
                 StartCoroutine(Move(plan));
             }

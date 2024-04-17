@@ -12,6 +12,7 @@ public class A_GoToWin : Action
 
         state.DisconnectTiles();
         state.GenerateConnections();
+
         return AStar.CanFindPath(start, end);
     }
 

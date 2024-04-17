@@ -11,7 +11,9 @@ public class WorldState
 
     List<Goal> Goals;
 
-    List<Action> Actions;
+    //List<Action> Actions;
+
+    List<ActionTypes> Actions;
 
     public Stack<Action> SatisfiedActions { get; set; } = null;
 
@@ -38,6 +40,14 @@ public class WorldState
     public GameObject endTile;
     public Vector3 endTilePos;
 
+    private enum ActionTypes
+    {
+        win,
+        moveBlock,
+        key,
+        door
+    }
+
     public WorldState(Map map)
     {
         floorElements = CopyDictionary(map.floorElements);
@@ -52,7 +62,8 @@ public class WorldState
         endTilePos = endTile.transform.position;
 
         Goals = new List<Goal>();
-        Actions = new List<Action>();
+        //Actions = new List<Action>();
+        Actions = new List<ActionTypes>();
 
         GetPositions();
         GetMoveableBlocks();
@@ -61,8 +72,11 @@ public class WorldState
         Goals.Add(new G_MoveBlock());
         Goals.Add(new G_Win());
 
-        Actions.Add(new A_MoveBlock());
-        Actions.Add(new A_GoToWin());
+        //Actions.Add(new A_MoveBlock());
+        //Actions.Add(new A_GoToWin());
+
+        Actions.Add(ActionTypes.win);
+        Actions.Add(ActionTypes.moveBlock);
     }
 
     public WorldState(WorldState state)
@@ -81,7 +95,8 @@ public class WorldState
         pits = state.pits;
 
         Goals = new List<Goal>(state.Goals);
-        Actions = new List<Action>(state.Actions);
+        //Actions = new List<Action>(state.Actions);
+        Actions = new List<ActionTypes>(state.Actions);
     }
 
     public float GetContentment()
@@ -120,9 +135,29 @@ public class WorldState
     private void GenerateActions()
     {
         SatisfiedActions = new Stack<Action>();
+
+        /*
         foreach(Action action in Actions)
             if(action.PreconditionsMet(this))
                 SatisfiedActions.Push(action);
+        */
+
+        foreach(ActionTypes type in Actions)
+        {
+            Action action = null;
+            switch (type)
+            {
+                case ActionTypes.win:
+                    action = new A_GoToWin();
+                    break;
+                case ActionTypes.moveBlock:
+                    action = new A_MoveBlock();
+                    break;
+            }
+            if (action != null && action.PreconditionsMet(this))
+                SatisfiedActions.Push(action);
+
+        }
     }
 
     public WorldState Clone()
@@ -295,7 +330,8 @@ public class WorldState
 
         foreach (var key in objectsOnMap.Keys)
         {
-            if(objectsOnMap[key] != null && objectsOnMap[key].tag == "MoveableBlock")
+            if(objectsOnMap[key] != null && objectsOnMap[key].tag == "MoveableBlock" &&
+                objectsOnMap[key].GetComponent<InteractibleObject>().canPush)
                 moveableBlocks.Add(key, objectsOnMap[key]);
         }
     }
