@@ -1137,7 +1137,7 @@ MonoBehaviour:
   moveableBlock: {fileID: 5895787365095305930, guid: e76adeb91221d814bb0e51537e9e72f3, type: 3}
   player: {fileID: 0}
   end: {fileID: 0}
-  currentMapIndex: 3
+  currentMapIndex: 4
   selectedBlock: -1
 --- !u!4 &934417699
 Transform:
