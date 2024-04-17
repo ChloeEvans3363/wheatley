@@ -111,6 +111,8 @@ public class RAT : MonoBehaviour
         }
         if (count < plan.Length)
         {
+            Vector3 playerPositon = player.transform.position;
+            TargetTile = Instance.CurrentTile((int)playerPositon.x, (int)playerPositon.z);
             path = plan[count].GetDirections(TargetTile, Instance.CurrentTile((int)endPosition.x, (int)endPosition.z));
             count++;
             yield return StartCoroutine(Move(plan));
