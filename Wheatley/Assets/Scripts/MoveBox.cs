@@ -64,7 +64,10 @@ public class MoveBox : MonoBehaviour
             placed = false;
 
             if (isFillingHole)
+            {
                 MapManager.Instance.currentMap.mapHeights[newMapPosition.Item1, newMapPosition.Item2]--;
+                MapManager.Instance.currentMap.floorElements.Remove(newMapPosition);
+            }
 
             if (interactibleObject.canPush)
                 ManageScenes.Instance.UpdateNumPushBlocks(1);

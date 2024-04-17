@@ -150,7 +150,7 @@ public class MapManager : MonoBehaviour
                     if (currentMap.floorElements[new Tuple<int, int>(i - 1, j)] != null)
                     {
                         // Otherwise if there isn't an object in the way
-                        if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i - 1, j)))
                         {
                             if (player.transform.position.y - 1 == currentMap.floorElements[new Tuple<int, int>(i - 1, j)].transform.position.y)
                             {
@@ -165,7 +165,7 @@ public class MapManager : MonoBehaviour
                     if (currentMap.floorElements[new Tuple<int, int>(i, j - 1)] != null)
                     {
                         // Otherwise if there isn't an object in the way
-                        if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j)))
+                        if (!currentMap.objectsOnMap.ContainsKey(new Tuple<int, int>(i, j - 1)))
                         {
                             if (player.transform.position.y - 1 == currentMap.floorElements[new Tuple<int, int>(i, j - 1)].transform.position.y)
                             {
