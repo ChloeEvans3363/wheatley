@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,9 +19,11 @@ public class RAT : MonoBehaviour
     private int count = 0;
     private bool simulatingPath = false;
     private bool checkedPath = false;
-
+    public Stopwatch timer = new Stopwatch();
     // The tile the character is moving to.
     private GameObject TargetTile { get; set; } = null;
+
+    bool isRandomAI = false;
 
     void Start()
     {
@@ -53,26 +56,38 @@ public class RAT : MonoBehaviour
             if (plan != null)
             {
                 int test = 0;
-                Debug.Log("DFS Plan:");
+                UnityEngine.Debug.Log("DFS Plan:");
                 foreach (Action action in plan)
                 {
-                    Debug.Log(test + ": " + action);
+                    UnityEngine.Debug.Log(test + ": " + action);
                     test++;
                 }
                 
 
                 StartCoroutine(Move(plan));
+                timer.Start();
             }
             else
             {
-                Debug.Log("No plan found");
+                UnityEngine.Debug.Log("No plan found");
                 ManageScenes.Instance.DisplaySearchFailed();
             }
         }
 
+        if(Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            isRandomAI = true;
+            timer.Start();
+            StartCoroutine(MoveRandom());
+        }
+
         if (Instance.playerLocation.Item1 == Instance.currentMap.endLocation.Item1 && Instance.playerLocation.Item2 == Instance.currentMap.endLocation.Item2 && !simulatingPath && !checkedPath)
         {
+            isRandomAI = false;
+            timer.Stop();
             bool matched = true;
+            UnityEngine.Debug.Log("Path Length: " + utilizedPath.Count);
+            UnityEngine.Debug.Log("Time Spent: " + timer.Elapsed.Seconds + "." + timer.ElapsedMilliseconds%1000);
             if (Instance.currentMap.intendedPath.Length != utilizedPath.Count)
             {
                 matched = false;
@@ -117,6 +132,39 @@ public class RAT : MonoBehaviour
             count++;
             yield return StartCoroutine(Move(plan));
         }
+    }
+
+    private IEnumerator MoveRandom()
+    {
+        System.Random random = new System.Random();
+        int choice = random.Next(4);
+        DirectionEnum dir;
+        switch (choice)
+        {
+            case 0:
+                dir = DirectionEnum.Left;
+                break;
+            case 1:
+                dir = DirectionEnum.Right;
+                break;
+            case 2:
+                dir = DirectionEnum.Up;
+                break;
+            case 3:
+                dir = DirectionEnum.Down;
+                break;
+            default:
+                dir = DirectionEnum.Stay;
+                break;
+        }
+        UnityEngine.Debug.Log(dir);
+        utilizedPath.Add(dir);
+        Instance.MovePlayer(dir);
+        //this is the slowdown. feel free to remove the wait to speed testing up :)
+        yield return new WaitForSeconds(0.01f);
+
+        if(isRandomAI)
+            yield return StartCoroutine(MoveRandom());
     }
 
     private IEnumerator SimulatePath()
