@@ -95,7 +95,7 @@ public class RAT : MonoBehaviour
             }
             else
             {
-                ManageScenes.Instance.DisplaySearchFailed();
+                ManageScenes.Instance.DisplayWrongPath();
             }
             checkedPath = true;
         }

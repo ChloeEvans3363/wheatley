@@ -11,6 +11,7 @@ public class ManageScenes : MonoBehaviour
     public static ManageScenes Instance { get { return _instance; } }
 
     [SerializeField] GameObject SearchFailedText;
+    [SerializeField] GameObject UnintendedPathText;
     [SerializeField] GameObject SearchSucceededText;
     public bool needsToRestart = false;
     [SerializeField] GameObject pushBlockCounter;
@@ -33,6 +34,7 @@ public class ManageScenes : MonoBehaviour
 
     public void StartGame()
     {
+        MapManager.currentMapIndex = 0;
         SceneManager.LoadScene("GameplayScene");
     }
 
@@ -55,6 +57,12 @@ public class ManageScenes : MonoBehaviour
     public void DisplaySearchFailed()
     {
         SearchFailedText.SetActive(true);
+        needsToRestart = true;
+    }
+
+    public void DisplayWrongPath()
+    {
+        UnintendedPathText.SetActive(true);
         needsToRestart = true;
     }
 
