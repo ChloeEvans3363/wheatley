@@ -36,7 +36,7 @@ public class MapManager : MonoBehaviour
     public GameObject end;
 
     public Map currentMap;
-    public static int currentMapIndex;
+    public static int currentMapIndex = 0;
 
     //Tracks which block should be placed
     public int selectedBlock = -1;
