@@ -70,7 +70,7 @@ public class MapData : MonoBehaviour
                                         DirectionEnum.Right};
         Map map2 = new Map(mapHeights2, intendedPath2, new Tuple<int, int>(0, 4), new Tuple<int, int>(5, 4), 1, 0);
 
-        int[,] mapHeights3 =
+        /*int[,] mapHeights3 =
         {
             {-1, -1, 1},
             {-1, -1, 1},
@@ -101,7 +101,7 @@ public class MapData : MonoBehaviour
         Map map3 = new Map(mapHeights3, intendedPath3, new Tuple<int, int>(0, 2), new Tuple<int, int>(8, 2), 1, 0);
         map3.AddKey(new Tuple<int, int>(4, 2));
         map3.AddDoor(new Tuple<int, int>(5, 2));
-        mapList.Add(map3);
+        mapList.Add(map3);*/
 
         int[,] mapHeights4 =
         {
