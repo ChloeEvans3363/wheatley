@@ -81,7 +81,7 @@ public class RAT : MonoBehaviour
             StartCoroutine(MoveRandom());
         }
 
-        if (Instance.playerLocation.Item1 == Instance.currentMap.endLocation.Item1 && Instance.playerLocation.Item2 == Instance.currentMap.endLocation.Item2 && !simulatingPath && !checkedPath)
+        if (!simulatingPath && Instance.playerLocation.Item1 == Instance.currentMap.endLocation.Item1 && Instance.playerLocation.Item2 == Instance.currentMap.endLocation.Item2 && !checkedPath)
         {
             isRandomAI = false;
             timer.Stop();
@@ -169,12 +169,12 @@ public class RAT : MonoBehaviour
 
     private IEnumerator SimulatePath()
     {
-        while (path.Count > 0)
+        while (path.Count > 1)
         {
             MapManager.Instance.MovePlayer(path.Pop());
             yield return new WaitForSeconds(simTime);
         }
-        if (path.Count == 0)
+        if (path.Count == 1)
         {
             Instance.loadMap(MapData.mapList[MapManager.currentMapIndex]);
             ManageScenes.Instance.ReloadScene();
