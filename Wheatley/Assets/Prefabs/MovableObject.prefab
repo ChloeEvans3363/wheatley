@@ -292,6 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebd9286964dae348bb4996bc6da6dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFillingHole: 0
   _raycastLayerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -317,7 +318,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canPush: 0
-  heldWord: Dogs
+  heldWord: 
+  type: 0
 --- !u!114 &3712581225495157514
 MonoBehaviour:
   m_ObjectHideFlags: 0

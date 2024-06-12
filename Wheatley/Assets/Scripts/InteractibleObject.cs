@@ -8,7 +8,7 @@ public class InteractibleObject : MonoBehaviour
 {
     public Tuple<int, int> location;
     public bool canPush = true;
-    public string heldWord = "Dogs";
+    public string heldWord = "";
 
     public enum ObjectType
     {
