@@ -13,6 +13,7 @@ public class ManageScenes : MonoBehaviour
     [SerializeField] GameObject SearchFailedText;
     [SerializeField] GameObject UnintendedPathText;
     [SerializeField] GameObject SearchSucceededText;
+    [SerializeField] GameObject NextLevelButton;
     public bool needsToRestart = false;
     [SerializeField] GameObject pushBlockCounter;
     [SerializeField] GameObject immovableBlockCounter;
@@ -69,6 +70,14 @@ public class ManageScenes : MonoBehaviour
     public void DisplaySuccess()
     {
         SearchSucceededText.SetActive(true);
+        if (MapManager.currentMapIndex == MapData.mapList.Count - 1)
+        {
+            NextLevelButton.SetActive(false);
+        }
+        else
+        {
+            NextLevelButton.SetActive(true);
+        }
         needsToRestart = true;
     }
 
